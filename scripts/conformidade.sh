@@ -1,9 +1,13 @@
 #!/bin/bash
 # Gera a tabela de conformidade (item 2 do relatório): uma requisição curl por status.
+# <ip-do-servidor> pode ser IPv4 (192.168.0.10) ou IPv6 (2804:...).
 # Uso: scripts/conformidade.sh <ip-do-servidor> [porta]
 HOST=${1:?uso: $0 <ip-do-servidor> [porta]}
+HOST=${HOST#[}; HOST=${HOST%]}  # aceita o IP com ou sem colchetes
+URL_HOST=$HOST
+[[ $HOST == *:* ]] && URL_HOST="[$HOST]"  # IPv6 vai entre colchetes na URL
 PORT=${2:-8080}
-BASE="http://$HOST:$PORT"
+BASE="http://$URL_HOST:$PORT"
 
 run() {
   echo "=================================================================="

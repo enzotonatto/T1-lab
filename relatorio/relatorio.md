@@ -17,7 +17,11 @@ Exportar para PDF: abrir no VS Code/Typora e exportar, ou
 
 **Ambiente.** Servidor em `<máquina A: modelo, macOS x, IP 192.168.x.x>`, clientes em
 `<máquina B: …, IP …>` e `<máquina C: …>`, todas na rede `<Wi-Fi doméstica / hotspot / …>`.
-Servidor escutando em `0.0.0.0:8080`, raiz `./www`.
+Rede: hotspot de iPhone (`<operadora>`), que fornece **somente IPv6**. O servidor
+foi executado com `--host ::`: socket `AF_INET6` com `IPV6_V6ONLY` desligado, que
+aceita clientes IPv6 e IPv4 (estes aparecem como `::ffff:a.b.c.d`). O padrão
+continua sendo `0.0.0.0`, como pede o enunciado. Raiz `./www`, porta 8080.
+TODO: ajustar se as medições finais forem feitas em rede IPv4.
 
 **Estrutura.** Um único arquivo, `server.py` (Python 3, só biblioteca padrão):
 
@@ -156,6 +160,8 @@ Roteiro:
 - Multiplicar por 10 conexões e comparar com o total de C1 (em %).
 - Comparar com a diferença de pacotes e de bytes entre C1 e C2: quanto dela é
   explicado só pela abertura e pelo fechamento de conexões?
+- IPv6: o cabeçalho IP tem 40 bytes (IPv4: 20). Quanto isso pesa num SYN
+  (sem payload) e no total de bytes de overhead?
 - Detalhe: o script conta como encerramento todo FIN/RST e todo ACK puro depois
   do primeiro FIN da conexão.
 

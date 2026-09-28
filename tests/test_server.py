@@ -343,3 +343,33 @@ class ServerTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+@unittest.skipUnless(socket.has_ipv6, "sistema sem IPv6")
+class DualStackTest(unittest.TestCase):
+    """Com --host :: o mesmo socket atende IPv6 e IPv4."""
+
+    def test_ipv6_and_ipv4_on_same_socket(self):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp)
+        with open(os.path.join(tmp, "a.txt"), "wb") as f:
+            f.write(b"txt")
+        port = free_port()
+        proc = subprocess.Popen([sys.executable, SERVER, "--port", str(port), "--root", tmp,
+                                 "--host", "::", "--quiet"], stdout=subprocess.DEVNULL)
+        self.addCleanup(proc.wait)
+        self.addCleanup(proc.terminate)
+        for address in ("::1", "127.0.0.1"):
+            with self.subTest(address=address):
+                for _ in range(50):
+                    try:
+                        sock = socket.create_connection((address, port), timeout=5)
+                        break
+                    except OSError:
+                        time.sleep(0.1)
+                client = Client.__new__(Client)
+                client.sock, client.buffer = sock, b""
+                self.addCleanup(client.close)
+                client.sendall(b"GET /a.txt HTTP/1.1\r\nHost: x\r\n\r\n")
+                status, _, body = client.read_response()
+                self.assertEqual((status, body), (200, b"txt"))

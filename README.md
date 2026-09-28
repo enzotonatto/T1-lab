@@ -23,7 +23,7 @@ python3 server.py --port 8080 --root ./www
 |-------------|-------------|-----------|-----------------------------------------------------|
 | `--port`    | sim         | –         | Porta TCP (use uma porta alta, > 1024)              |
 | `--root`    | sim         | –         | Diretório raiz servido                              |
-| `--host`    | não         | `0.0.0.0` | Endereço de bind (todas as interfaces)              |
+| `--host`    | não         | `0.0.0.0` | Endereço de bind. `0.0.0.0` = todas as interfaces IPv4; `::` = IPv6 **e** IPv4 (dual-stack) |
 | `--timeout` | não         | `5`       | Timeout de conexão ociosa, em segundos              |
 | `--quiet`   | não         | –         | Desliga o log de requisições no terminal            |
 
@@ -38,6 +38,19 @@ com horário (ms), id da conexão, thread e IP:porta do cliente. `Ctrl+C` encerr
 - IP da máquina: `ipconfig getifaddr en0` (Wi-Fi). O `ipconfig` do enunciado é do Windows.
 - Teste de alcance a partir de outra máquina: `ping <ip>` e depois
   `curl -i http://<ip>:8080/`.
+
+### Rede só IPv6 (hotspot de iPhone em algumas operadoras)
+
+Se `ipconfig getifaddr en0` não mostra nada (ou mostra `192.0.0.2`, endereço interno do
+CLAT do macOS, inalcançável por outras máquinas), a rede só tem IPv6:
+
+```bash
+python3 server.py --port 8080 --root ./www --host ::
+```
+
+- IPv6 do Mac: `ifconfig en0 | grep "autoconf secured" | awk '{print $2}'`
+- Teste do Windows: `ping -6 -n 4 <ipv6>` e `curl -i "http://[<ipv6>]:8080/"`. Em URLs o IPv6 vai **entre colchetes**.
+- Os scripts aceitam o IPv6 puro (`scripts/c1.sh 2804:…`) e colocam os colchetes sozinhos.
 
 ### Ubuntu e Windows
 

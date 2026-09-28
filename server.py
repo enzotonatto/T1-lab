@@ -268,8 +268,16 @@ def handle_request(conn, request, root, keep_alive):
 
 # ---------------------------------------------------------------- conexões
 
+def format_address(address):
+    """'ip:porta' para IPv4 e '[ip]:porta' para IPv6 (address vem do accept)."""
+    ip, port = address[0], address[1]
+    if ip.startswith("::ffff:"):  # cliente IPv4 num socket IPv6 dual-stack
+        ip = ip[len("::ffff:"):]
+    return f"[{ip}]:{port}" if ":" in ip else f"{ip}:{port}"
+
+
 def handle_connection(conn, address, conn_id, root, timeout):
-    client = f"{address[0]}:{address[1]}"
+    client = format_address(address)
     log(conn_id, f"conexão aberta de {client}")
     # o mesmo timeout vale para esperar a próxima requisição (conexão ociosa)
     # e para uma requisição que chega pela metade (cliente lento)
@@ -332,7 +340,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Servidor HTTP/1.1 sobre sockets TCP (T1 - Grupo 5)")
     parser.add_argument("--port", type=int, required=True, help="porta TCP (use > 1024)")
     parser.add_argument("--root", required=True, help="diretório raiz servido")
-    parser.add_argument("--host", default="0.0.0.0", help="endereço de bind (padrão: 0.0.0.0)")
+    parser.add_argument("--host", default="0.0.0.0", help="endereço de bind (padrão: 0.0.0.0; '::' = IPv6 e IPv4)")
     parser.add_argument("--timeout", type=float, default=5.0, help="timeout de conexão ociosa em s (padrão: 5)")
     parser.add_argument("--quiet", action="store_true", help="não imprime o log de requisições")
     return parser.parse_args()
@@ -346,12 +354,18 @@ def main():
     if not os.path.isdir(root):
         sys.exit(f"erro: diretório raiz não existe: {args.root}")
 
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    if ":" in args.host:
+        # IPv6 (ex.: hotspot só IPv6). Com IPV6_V6ONLY desligado o mesmo socket
+        # também aceita clientes IPv4, que aparecem como ::ffff:a.b.c.d
+        server = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+        server.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+    else:
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # permite reiniciar o servidor sem esperar o TIME_WAIT da execução anterior
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind((args.host, args.port))
     server.listen(128)
-    print(f"{SERVER_NAME} escutando em {args.host}:{args.port}, raiz {root}, "
+    print(f"{SERVER_NAME} escutando em {format_address((args.host, args.port))}, raiz {root}, "
           f"timeout {args.timeout:g}s", flush=True)
 
     conn_id = 0
