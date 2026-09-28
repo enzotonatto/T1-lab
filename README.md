@@ -48,7 +48,7 @@ CLAT do macOS, inalcançável por outras máquinas), a rede só tem IPv6:
 python3 server.py --port 8080 --root ./www --host ::
 ```
 
-- IPv6 do Mac: `ifconfig en0 | grep "autoconf secured" | awk '{print $2}'`
+- IPv6 do Mac: `ifconfig en0 | grep "autoconf secured" | grep -v deprecated | awk '{print $2}'`
 - Teste do Windows: `ping -6 -n 4 <ipv6>` e `curl -i "http://[<ipv6>]:8080/"`. Em URLs o IPv6 vai **entre colchetes**.
 - Os scripts aceitam o IPv6 puro (`scripts/c1.sh 2804:…`) e colocam os colchetes sozinhos.
 
