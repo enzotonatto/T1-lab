@@ -129,14 +129,23 @@ fechou as três por timeout ocioso depois de 5 s (TODO: log real entre máquinas
 
 # 6. RTT medido
 
-`ping -c 20 <ip-servidor>` a partir de `<B>`:
+`ping -6 -n 20 <ip-servidor>` a partir de `<B>` (Windows):
 
-TODO: `round-trip min/avg/max/stddev = … / … / … / … ms`. **RTT médio = <x> ms.**
+TODO: mínimo / média / máximo e a **mediana** (calcular a partir das 20 amostras).
+
+Roteiro: no hotspot o RTT oscila muito (ex.: de 6 a 823 ms), e poucos valores
+altos puxam a média para cima. Reportar também a mediana e comparar com o RTT
+medido na própria captura: o tempo entre o SYN-ACK enviado pelo servidor e o ACK
+do cliente em cada handshake. O ping manda 1 pacote por segundo, e o rádio Wi-Fi
+do celular/notebook entra em economia de energia entre um pacote e outro. O
+tráfego em rajada do TCP não dá tempo para isso, por isso o RTT medido nos
+handshakes tende a ser menor.
 
 # 7. Comparação C1 × C2
 
 10 requisições sequenciais a `/medicao.html` (4 636 bytes de corpo).
-C1: `scripts/c1.sh` (uma conexão por requisição, `Connection: close`).
+C1: `scripts/c1.sh` (um processo `curl` com 10 URLs e `Connection: close`: o servidor fecha
+após cada resposta e o curl abre uma conexão nova por requisição).
 C2: `scripts/c2.sh` (um processo `curl`, uma conexão persistente).
 Métricas extraídas com `scripts/metricas.py` (mediana de 3 execuções).
 
@@ -175,9 +184,10 @@ Roteiro:
   GET, mais 1 RTT de requisição/resposta. Em C2 o handshake acontece uma vez só.
 - Diferença esperada ≈ 9 × RTT (9 handshakes a mais). Calcular
   (T_C1 − T_C2) / RTT_médio e comparar com 9.
-- Se a diferença medida for maior que 9 RTT, explicar de onde vem o resto
-  (ex.: C1 inicia um processo `curl` por requisição, e esse tempo aparece entre
-  o fim de uma conexão e o SYN da seguinte). Olhar no Wireshark o intervalo entre o SYN
+- C1 e C2 usam um único processo `curl`, então a diferença de tempo vem só da
+  rede e das conexões. Numa medição anterior, com um `curl` por requisição, cada
+  processo novo somava ~150 ms entre uma conexão e a seguinte no Windows, muito
+  mais que o RTT. Vale citar como armadilha de medição. Olhar no Wireshark o intervalo entre o SYN
   e o GET de cada conexão, que deve ser ≈ 1 RTT.
 - O encerramento (FIN) em geral não soma RTT ao tempo percebido: o cliente
   já recebeu a resposta completa quando a troca de FINs termina.
