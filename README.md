@@ -39,6 +39,23 @@ com horário (ms), id da conexão, thread e IP:porta do cliente. `Ctrl+C` encerr
 - Teste de alcance a partir de outra máquina: `ping <ip>` e depois
   `curl -i http://<ip>:8080/`.
 
+### Ubuntu e Windows
+
+| | Ubuntu | Windows |
+|---|---|---|
+| Rodar o servidor | `python3 server.py …` | `py server.py …` (instalar Python ≥ 3.9 de python.org) |
+| IP da máquina | `ip -4 addr` ou `hostname -I` | `ipconfig` |
+| Firewall | `ufw` costuma vir desligado; se ativo: `sudo ufw allow 8080/tcp` | aceitar o aviso do Firewall do Windows **marcando "Redes privadas"**; a rede Wi-Fi precisa estar como **Privada** (em Pública, as conexões de entrada são bloqueadas) |
+| curl | `sudo apt install curl` se faltar | já vem instalado; no PowerShell usar **`curl.exe`** (`curl` sozinho é um alias de `Invoke-WebRequest`) |
+| Scripts `.sh` | rodam direto | rodar no **Git Bash** ou no WSL (no PowerShell não funcionam) |
+| ping (RTT) | `ping -c 20 <ip>` | `ping -n 20 <ip>` |
+| Wireshark/tshark | `sudo apt install wireshark`, responder "sim" para capturar sem root e `sudo usermod -aG wireshark $USER` (relogar) | o instalador inclui o Npcap (deixar marcado); `tshark` fica em `C:\Program Files\Wireshark\` |
+| Interface de captura | `wlp…`/`enp…` (ver `ip link`) | "Wi-Fi" ou "Ethernet" |
+
+**WSL2:** serve como **cliente** (curl/scripts), mas **não** rode o servidor dentro do
+WSL2. Ele fica atrás de uma NAT com IP próprio e as outras máquinas não alcançam
+sem configurar redirecionamento de porta. Para servidor no Windows, use o Python do Windows.
+
 ## Estrutura
 
 ```

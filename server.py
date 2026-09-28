@@ -177,7 +177,12 @@ def resolve_path(target, root):
     # realpath resolve '..' e links simbólicos; só então comparamos com o root.
     # commonpath compara componentes inteiros: '/www2' não passa como se estivesse em '/www'.
     full_path = os.path.realpath(candidate)
-    if os.path.commonpath([root, full_path]) != root:
+    try:
+        inside_root = os.path.commonpath([root, full_path]) == root
+    except ValueError:
+        # Windows: outro drive (/D:/x) ou nome reservado (/CON vira \\.\CON)
+        inside_root = False
+    if not inside_root:
         return 403, None
     if not os.path.isfile(full_path):
         return 404, None

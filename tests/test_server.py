@@ -88,7 +88,10 @@ class ServerTest(unittest.TestCase):
             f.write(b"segredo")
         with open(os.path.join(cls.tmp, "www2", "x.txt"), "wb") as f:
             f.write(b"vizinho")
-        os.symlink(os.path.join(cls.tmp, "segredo.txt"), os.path.join(cls.root, "link-fora"))
+        try:
+            os.symlink(os.path.join(cls.tmp, "segredo.txt"), os.path.join(cls.root, "link-fora"))
+        except OSError:
+            pass  # Windows sem modo desenvolvedor não cria symlink; /link-fora vira 404
 
         cls.port = free_port()
         cls.proc = subprocess.Popen(
@@ -238,13 +241,28 @@ class ServerTest(unittest.TestCase):
     def test_traversal_403(self):
         for target in ("/../segredo.txt", "/../../../../etc/passwd",
                        "/%2e%2e/segredo.txt", "/%2E%2E%2Fsegredo.txt", "/..%2fsegredo.txt",
-                       "/sub/../../segredo.txt", "/../www2/x.txt", "/link-fora",
-                       "//etc/../../segredo.txt"):
+                       "/sub/../../segredo.txt", "/../www2/x.txt",
+                       "//etc/../../segredo.txt", "/%2e%2e%5csegredo.txt"):
             with self.subTest(target=target):
                 status, _, body = self.get(target)
-                self.assertEqual(status, 403)
+                # %5c (\) é separador só no Windows; no Unix é um nome de arquivo comum (404)
+                expected = (403, 404) if "%5c" in target and os.sep == "/" else (403,)
+                self.assertIn(status, expected)
                 self.assertNotIn(b"segredo", body)
                 self.assertNotIn(b"vizinho", body)
+
+    def test_symlink_outside_root_403(self):
+        if not os.path.islink(os.path.join(self.root, "link-fora")):
+            self.skipTest("sistema sem suporte a symlink")
+        status, _, body = self.get("/link-fora")
+        self.assertEqual(status, 403)
+        self.assertNotIn(b"segredo", body)
+
+    @unittest.skipUnless(os.name == "nt", "caminhos com drive e nomes reservados só existem no Windows")
+    def test_windows_drive_and_reserved_names_403(self):
+        for target in ("/C:/Windows/win.ini", "/D:/x.txt", "/CON", "/NUL"):
+            with self.subTest(target=target):
+                self.assertEqual(self.get(target)[0], 403)
 
     def test_dotdot_inside_root_is_allowed(self):
         status, _, body = self.get("/sub/../a.txt")

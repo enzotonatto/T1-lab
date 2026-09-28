@@ -6,7 +6,13 @@
 HOST=${1:?uso: $0 <ip-do-servidor> [porta]}
 PORT=${2:-8080}
 
-python3 - "$HOST" "$PORT" <<'PY'
+# acha um Python que funcione (no Windows, "python3" pode ser só o atalho da Microsoft Store)
+for candidate in python3 python py; do
+  if "$candidate" -c "" >/dev/null 2>&1; then PY=$candidate; break; fi
+done
+: "${PY:?Python não encontrado}"
+
+"$PY" - "$HOST" "$PORT" <<'PY'
 import socket, sys, time
 host, port = sys.argv[1], int(sys.argv[2])
 slow = socket.create_connection((host, port))
