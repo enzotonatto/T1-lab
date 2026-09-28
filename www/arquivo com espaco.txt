@@ -1,0 +1,1 @@
+Este arquivo tem espaços no nome: a requisição usa %20.

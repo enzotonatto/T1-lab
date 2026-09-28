@@ -1,0 +1,6 @@
+body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+h1 { color: #1a4d8f; }
+.imagens { display: flex; gap: 1rem; flex-wrap: wrap; }
+figure { margin: 0; text-align: center; }
+.ok { color: #1b7a2b; font-weight: bold; }
+.pendente { color: #b00020; }
