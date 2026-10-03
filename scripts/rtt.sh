@@ -11,8 +11,10 @@ COUNT=${2:-50}
 # "tempo=" em vez de "time=", e o awk lê "61.2" como 61. Assim funciona em qualquer sistema.
 export LC_ALL=C
 
-ping -c "$COUNT" -i 0.2 "$HOST" | tee /dev/stderr \
-  | grep -oE 'time[=<][0-9.]+' | cut -c6- | sort -n \
+# a saída completa do ping vai para a tela E para o arquivo (com tee), seguida do resumo
+samples=$(mktemp)
+ping -c "$COUNT" -i 0.2 "$HOST" | tee "$samples"
+grep -oE 'time[=<][0-9.]+' "$samples" | cut -c6- | sort -n \
   | awk '{ v[NR] = $1; sum += $1 }
          END {
            if (NR == 0) { print "nenhuma resposta"; exit 1 }
@@ -20,3 +22,4 @@ ping -c "$COUNT" -i 0.2 "$HOST" | tee /dev/stderr \
            printf "\nRTT (%d respostas): mínimo %.2f ms | mediana %.2f ms | média %.2f ms | máximo %.2f ms\n",
                   NR, v[1], median, sum / NR, v[NR]
          }'
+rm -f "$samples"

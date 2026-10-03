@@ -67,30 +67,35 @@ socket no fim. Justificativa:
 
 # 2. Tabela de conformidade
 
-Gerada com `scripts/conformidade.sh <ip>` executado no Ubuntu.
+Gerada com `scripts/conformidade.sh 192.168.15.9` executado no Ubuntu
+(saída completa em `relatorio/evidencias/conformidade.txt`). Todas as respostas
+trazem `Date` (IMF-fixdate, GMT), `Server: LabRedes-T1-Grupo5/1.0`,
+`Content-Type` e `Content-Length`.
 
-| Status | Requisição (`curl`) | Resposta obtida (linha de status e cabeçalhos relevantes) |
+| Status | Requisição (`curl`) | Resposta obtida |
 |---|---|---|
-| 200 | `curl -i http://<ip>:8080/index.html` | TODO: colar `HTTP/1.1 200 OK`, `Content-Type`, `Content-Length`, `Date`, `Server` |
-| 200 (HEAD) | `curl -I http://<ip>:8080/index.html` | TODO: mesmos cabeçalhos, sem corpo |
-| 400 | `curl -i --request-target "/index.html extra" http://<ip>:8080/` | TODO |
-| 400 | `curl -i -H $'X-Ok: 1\r\nCabecalhoSemDoisPontos' http://<ip>:8080/` | TODO |
-| 403 | `curl -i --path-as-is http://<ip>:8080/../../etc/passwd` | TODO |
-| 404 | `curl -i http://<ip>:8080/nao-existe.html` | TODO |
-| 405 | `curl -i -X POST -d "a=1" http://<ip>:8080/index.html` | TODO: incluir `Allow: GET, HEAD` |
+| 200 | `curl -i http://192.168.15.9:8080/index.html` | `HTTP/1.1 200 OK`, `Content-Type: text/html; charset=utf-8`, `Content-Length: 1404` + corpo |
+| 200 (HEAD) | `curl -I http://192.168.15.9:8080/index.html` | `HTTP/1.1 200 OK`, mesmos cabeçalhos, `Content-Length: 1404`, sem corpo |
+| 400 | `curl -i --request-target "/index.html extra" http://192.168.15.9:8080/` | `HTTP/1.1 400 Bad Request`, `Content-Length: 139`, `Connection: close` (request line com 4 partes) |
+| 400 | `curl -i -H $'X-Ok: 1\r\nCabecalhoSemDoisPontos' http://192.168.15.9:8080/` | `HTTP/1.1 400 Bad Request`, `Content-Length: 139`, `Connection: close` (linha de cabeçalho sem `:`) |
+| 403 | `curl -i --path-as-is http://192.168.15.9:8080/../../etc/passwd` | `HTTP/1.1 403 Forbidden`, `Content-Length: 135` |
+| 404 | `curl -i http://192.168.15.9:8080/nao-existe.html` | `HTTP/1.1 404 Not Found`, `Content-Length: 135` |
+| 405 | `curl -i -X POST -d "a=1" http://192.168.15.9:8080/index.html` | `HTTP/1.1 405 Method Not Allowed`, `Allow: GET, HEAD`, `Content-Length: 153` |
+| 405 | `curl -i -X DELETE http://192.168.15.9:8080/index.html` | `HTTP/1.1 405 Method Not Allowed`, `Allow: GET, HEAD`, `Content-Length: 153` |
 
 # 3. Demonstração de segurança (travessia de diretório)
 
-Gerada com `scripts/travessia.sh <ip>`. `--path-as-is` impede o `curl` de
-normalizar o `..` antes de enviar.
+Gerada com `scripts/travessia.sh 192.168.15.9` no Ubuntu (saída completa em
+`relatorio/evidencias/travessia.txt`). `--path-as-is` impede o `curl` de
+normalizar o `..` antes de enviar. As cinco tentativas foram rejeitadas:
 
 | # | Requisição enviada | Técnica | Resposta |
 |---|---|---|---|
-| 1 | `GET /../../etc/passwd` | `..` literal | TODO `403 Forbidden` |
-| 2 | `GET /%2e%2e/%2e%2e/etc/passwd` | `.` codificado | TODO |
-| 3 | `GET /..%2f..%2f..%2fetc%2fpasswd` | `/` codificado | TODO |
-| 4 | `GET /img/../../../etc/passwd` | sai do root a partir de um subdiretório | TODO |
-| 5 | `GET /%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd` | tudo codificado | TODO |
+| 1 | `GET /../../etc/passwd` | `..` literal | `403 Forbidden` |
+| 2 | `GET /%2e%2e/%2e%2e/etc/passwd` | `.` codificado | `403 Forbidden` |
+| 3 | `GET /..%2f..%2f..%2fetc%2fpasswd` | `/` codificado | `403 Forbidden` |
+| 4 | `GET /img/../../../etc/passwd` | sai do root a partir de um subdiretório | `403 Forbidden` |
+| 5 | `GET /%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd` | tudo codificado | `403 Forbidden` |
 
 Por que funciona: o caminho é **decodificado antes** da verificação (então
 `%2e%2e` vira `..`), e a verificação é feita sobre o caminho **canônico**
@@ -99,48 +104,83 @@ com `commonpath` (`/www2` não passa como se estivesse dentro de `/www`). Os
 testes automatizados também cobrem um link simbólico dentro de `www/` apontando
 para fora (403).
 
-TODO: print do terminal com as respostas e/ou do log do servidor.
+TODO (opcional): print do terminal com as respostas.
 
 # 4. Captura de uma transação completa
 
-Captura `capturas/transacao.pcapng`: `curl http://<ip>:8080/index.html` feito do
-Ubuntu e capturado no Mac, filtro `tcp.port == 8080`.
+Captura `capturas/transacao.pcapng`: `curl http://192.168.15.9:8080/index.html`
+feito do Ubuntu (192.168.15.15) e capturado no Mac (192.168.15.9), filtro
+`tcp.port == 8080`. Uma única conexão, 12 pacotes, 19 ms do SYN ao último ACK.
 
-TODO: print do Wireshark, identificando:
+TODO: print do Wireshark (`relatorio/img/transacao.png`).
 
-| Pacotes (nº) | Papel |
-|---|---|
-| TODO | Handshake: SYN (B→A), SYN-ACK (A→B), ACK (B→A) |
-| TODO | Requisição: segmento PSH/ACK com `GET /index.html HTTP/1.1` |
-| TODO | Resposta: segmento(s) com `HTTP/1.1 200 OK` + corpo, e os ACKs |
-| TODO | Encerramento: FIN/ACK de cada lado e ACKs finais |
+| Pacote | Origem → destino | Flags | Dados | Papel |
+|---|---|---|---|---|
+| 1 | Ubuntu → Mac | SYN | 0 | **Handshake** (1/3), MSS 1460 |
+| 2 | Mac → Ubuntu | SYN, ACK | 0 | **Handshake** (2/3) |
+| 3 | Ubuntu → Mac | ACK | 0 | **Handshake** (3/3), 6,1 ms após o SYN ≈ 1 RTT |
+| 4 | Ubuntu → Mac | PSH, ACK | 91 B | **Requisição**: `GET /index.html HTTP/1.1` |
+| 5 | Mac → Ubuntu | ACK | 0 | ACK da requisição |
+| 6 | Mac → Ubuntu | ACK | 1448 B | **Resposta**: `HTTP/1.1 200 OK` + cabeçalhos + início do corpo (1 MSS) |
+| 7 | Mac → Ubuntu | PSH, ACK | 106 B | **Resposta**: fim do corpo (1404 B de corpo no total) |
+| 8 | Ubuntu → Mac | ACK | 0 | ACK da resposta |
+| 9 | Ubuntu → Mac | FIN, ACK | 0 | **Encerramento**: cliente fecha (o curl termina) |
+| 10 | Mac → Ubuntu | ACK | 0 | **Encerramento**: ACK do FIN do cliente |
+| 11 | Mac → Ubuntu | FIN, ACK | 0 | **Encerramento**: servidor fecha |
+| 12 | Ubuntu → Mac | ACK | 0 | **Encerramento**: ACK final |
+
+O cabeçalho e o primeiro bloco do corpo saem no mesmo segmento (pacote 6),
+efeito do `sendall` único descrito na seção 1.
 
 # 5. Evidência de atendimento simultâneo
 
-O Ubuntu executa `scripts/simultaneo.sh <ip>`, que deixa uma requisição pela metade
-aberta e, enquanto isso, faz requisições normais. Ao mesmo tempo, o navegador do
-celular carrega a página (várias conexões). As duas máquinas são atendidas.
+O Ubuntu (192.168.15.15) executou `scripts/simultaneo.sh 192.168.15.9`: uma
+requisição **lenta**, que envia uma linha de cabeçalho por segundo e só termina
+após ~15 s, e, em paralelo, uma requisição rápida por segundo em outras conexões.
+Durante essa janela, o navegador do celular (192.168.15.8) carregou a página.
 
-TODO: trecho do log do servidor mostrando conexões de dois IPs diferentes
-intercaladas (ids de conexão e threads distintos, horários sobrepostos).
+Trecho de `capturas/servidor.log` (cada conexão tem sua thread `tN`):
 
-Observação do teste com navegador: ao carregar `index.html`, o navegador abriu
-3 conexões em paralelo e reaproveitou uma delas para 4 requisições. O servidor
-fechou as três por timeout ocioso depois de 5 s (TODO: log real entre máquinas).
+```
+18:19:50.881 [conn 26 | t26] conexão aberta de 192.168.15.15:48744      <- requisição lenta
+18:19:50.886 [conn 27 | t27] conexão aberta de 192.168.15.15:48748
+18:19:50.887 [conn 27 | t27] "GET /texto.txt HTTP/1.1" 200 50B
+...
+18:19:55.303 [conn 32 | t32] conexão aberta de 192.168.15.8:60952       <- celular
+18:19:55.303 [conn 32 | t32] "GET / HTTP/1.1" 200 1404B
+18:19:55.318 [conn 32 | t32] "GET /style.css HTTP/1.1" 200 340B
+18:19:55.324 [conn 33 | t33] conexão aberta de 192.168.15.8:60953
+18:19:55.324 [conn 33 | t33] "GET /img/logo.png HTTP/1.1" 200 18561B
+...
+18:20:06.063 [conn 26 | t26] "GET /index.html HTTP/1.1" 200 1404B       <- lenta termina
+18:20:06.063 [conn 26 | t26] conexão fechada com 192.168.15.15:48744: Connection: close, 1 requisição(ões)
+```
+
+A conexão 26 ficou aberta por 15,2 s; nesse intervalo o servidor atendeu as
+requisições rápidas do Ubuntu e as conexões do celular. Na captura
+`capturas/simultaneo.pcapng`, as 3 conexões do celular começam e terminam dentro
+da conexão lenta do Ubuntu (Wireshark: Statistics → Conversations → TCP).
+
+TODO (opcional): print da janela Conversations.
 
 # 6. RTT medido
 
-`scripts/rtt.sh <ip-servidor>` a partir do Ubuntu (50 pings, intervalo de 0,2 s):
+`scripts/rtt.sh 192.168.15.9` no Ubuntu antes de cada rodada (50 pings, intervalo
+de 0,2 s; resumos em `relatorio/evidencias/ping_N.txt`):
 
-TODO: mínimo / mediana / média / máximo.
+| Rodada | Mínimo | **Mediana** | Média | Máximo |
+|---|---|---|---|---|
+| 1 | 5,32 ms | **7,09 ms** | 17,77 ms | 203,00 ms |
+| 2 | 5,50 ms | **6,72 ms** | 15,73 ms | 89,80 ms |
+| 3 | 4,50 ms | **7,04 ms** | 14,06 ms | 90,40 ms |
 
-Roteiro: em Wi-Fi o RTT oscila, e poucos valores altos puxam a média para cima
-(nos testes preliminares, num hotspot, as amostras foram de 6 a 823 ms). Reportar também a mediana e comparar com o RTT
-medido na própria captura: o tempo entre o SYN-ACK enviado pelo servidor e o ACK
-do cliente em cada handshake. Com intervalos longos entre pings, o rádio Wi-Fi
-entra em economia de energia entre um pacote e outro. O
-tráfego em rajada do TCP não dá tempo para isso, por isso o RTT medido nos
-handshakes tende a ser menor.
+RTT de referência: **≈ 7 ms** (mediana). A média é 2 a 2,5 vezes maior porque
+poucos pings muito lentos (até 203 ms), típicos de Wi-Fi, puxam a média para cima.
+
+RTT medido nas próprias capturas (do SYN-ACK enviado pelo servidor até o ACK
+do cliente): mediana de **5,2 ms** em `c1.pcapng` (10 handshakes).
+
+TODO: comentar a diferença entre o RTT do ping e o dos handshakes.
 
 # 7. Comparação C1 × C2
 
@@ -148,20 +188,40 @@ handshakes tende a ser menor.
 C1: `scripts/c1.sh` (um processo `curl` com 10 URLs e `Connection: close`: o servidor fecha
 após cada resposta e o curl abre uma conexão nova por requisição).
 C2: `scripts/c2.sh` (um processo `curl`, uma conexão persistente).
-Métricas extraídas com `scripts/metricas.py` (mediana de 3 execuções).
+Métricas extraídas com `scripts/metricas.py`. Foram feitas 3 rodadas de cada; a
+rodada 1 é a mediana de tempo nos dois cenários e é a entregue como
+`capturas/c1.pcapng` e `capturas/c2.pcapng`.
 
 | Métrica | C1 | C2 | Economia de C2 |
 |---|---|---|---|
-| Handshakes TCP completos | TODO (esperado 10) | TODO (esperado 1) | – |
-| Total de pacotes | TODO | TODO | TODO % |
-| Bytes totais | TODO | TODO | TODO % |
-| Tempo total | TODO ms | TODO ms | TODO % |
+| Handshakes TCP completos | 10 | 1 | 9 handshakes |
+| Total de pacotes | 152 | 78 | **48,7 %** |
+| Bytes totais | 59 402 | 53 958 | **9,2 %** |
+| Tempo total | 136,1 ms | 65,3 ms | **52,0 %** |
 
 Economia % = (C1 − C2) / C1 × 100.
 
+Todas as rodadas:
+
+| Rodada | C1: pacotes / bytes / tempo | C2: pacotes / bytes / tempo |
+|---|---|---|
+| 1 | 152 / 59 402 / 136,1 ms | 78 / 53 958 / 65,3 ms |
+| 2 | 150 / 59 270 / 223,2 ms | 84 / 54 354 / 63,0 ms |
+| 3 | 153 / 59 468 / 129,3 ms | 81 / 54 156 / 68,8 ms |
+
 # 8. Overhead de conexão (C1)
 
-TODO: escrever a partir da saída de `metricas.py` para `c1.pcapng` e conferir no Wireshark.
+Dados de `c1.pcapng`:
+
+- Um handshake = 3 pacotes: SYN (74 B) + SYN-ACK (78 B) + ACK (66 B) = **218 B**.
+- Um encerramento = 4 pacotes: FIN, ACK, FIN, ACK (66 B cada) = **264 B**.
+- Abrir e fechar uma conexão: **7 pacotes, 482 B**. Em C2 (1 conexão), exatamente isso.
+- `metricas.py` em C1: abertura 30 pacotes / 2 180 B; encerramento 62 pacotes / 4 092 B
+  (inclui ACKs puros de dados que chegam depois do primeiro FIN).
+- Diferença de payload C1 − C2 = 380 B = 10 × (`Connection: close\r\n` na
+  requisição + na resposta) = 10 × 2 × 19 B.
+
+TODO: escrever a análise.
 
 Roteiro:
 
@@ -175,7 +235,19 @@ Roteiro:
 
 # 9. Análise em função do RTT
 
-TODO: escrever com os números reais.
+Dados (rodada 1):
+
+- T_C1 − T_C2 = 136,1 − 65,3 = **70,8 ms**.
+- Em RTTs: 70,8 / 7,09 (mediana do ping) ≈ **10 RTT**; 70,8 / 5,2 (RTT dos
+  handshakes na captura) ≈ 13,6 RTT. Esperado: 9 RTT (9 handshakes a mais).
+- Em C1, visto do servidor, cada requisição gasta: SYN → GET ≈ **5,4 ms** (1 RTT
+  de handshake) + GET → fim da resposta ≈ 0,8 ms + fim da resposta → próximo SYN
+  ≈ **6,4 ms** (1 RTT: a resposta chega ao cliente e o SYN seguinte volta).
+- Em C2, o intervalo entre GETs consecutivos é ≈ **4,8 ms** (1 RTT por requisição).
+- Conta: C1 ≈ 10 × (5,4 + 0,8 + 6,4) ≈ 126 ms (medido: 136 ms);
+  C2 ≈ 6,4 (handshake) + 9 × 4,8 ≈ 50 ms + encerramento (medido: 65 ms).
+
+TODO: escrever a análise.
 
 Roteiro:
 

@@ -1,0 +1,136 @@
+==================================================================
+$ curl -s -i http://192.168.15.9:8080/index.html
+------------------------------------------------------------------
+HTTP/1.1 200 OK
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 1404
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>T1 Redes - Grupo 5</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/favicon.ico">
+</head>
+<body>
+  <h1>Grupo 5 &ndash; T1 Laboratório de Redes</h1>
+  <p>Servidor HTTP/1.1 implementado sobre sockets TCP.</p>
+
+  <h2>Integrantes</h2>
+  <ul>
+    <li>&lt;Integrante 1&gt;</li>
+    <li>&lt;Integrante 2&gt;</li>
+    <li>&lt;Integrante 3&gt;</li>
+  </ul>
+
+  <h2>Recursos carregados por esta página</h2>
+  <div class="imagens">
+    <figure><img src="/img/logo.png" alt="logo PNG" width="240" height="120"><figcaption>PNG</figcaption></figure>
+    <figure><img src="/img/foto.jpg" alt="foto JPG" width="240" height="160"><figcaption>JPG</figcaption></figure>
+  </div>
+  <p id="js-status" class="pendente">JavaScript ainda não executou (app.js não carregou).</p>
+  <p id="json-status" class="pendente">JSON ainda não carregado.</p>
+
+  <h2>Links</h2>
+  <ul>
+    <li><a href="/docs/exemplo.pdf">PDF de exemplo</a></li>
+    <li><a href="/data/info.json">JSON</a></li>
+    <li><a href="/texto.txt">Texto</a></li>
+    <li><a href="/arquivo%20com%20espaco.txt">Arquivo com espaço no nome (%20)</a></li>
+    <li><a href="/medicao.html">Recurso usado nas medições C1/C2</a></li>
+    <li><a href="/nao-existe.html">Página inexistente (404)</a></li>
+  </ul>
+
+  <script src="/app.js"></script>
+</body>
+</html>
+
+==================================================================
+$ curl -s -I http://192.168.15.9:8080/index.html
+------------------------------------------------------------------
+HTTP/1.1 200 OK
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 1404
+
+
+==================================================================
+$ curl -s -i --request-target /index.html\ extra http://192.168.15.9:8080/
+------------------------------------------------------------------
+HTTP/1.1 400 Bad Request
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 139
+Connection: close
+
+<!DOCTYPE html>
+<html><head><title>400 Bad Request</title></head><body><h1>400 Bad Request</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i -H $'X-Ok: 1\r\nCabecalhoSemDoisPontos' http://192.168.15.9:8080/
+------------------------------------------------------------------
+HTTP/1.1 400 Bad Request
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 139
+Connection: close
+
+<!DOCTYPE html>
+<html><head><title>400 Bad Request</title></head><body><h1>400 Bad Request</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i --path-as-is http://192.168.15.9:8080/../../etc/passwd
+------------------------------------------------------------------
+HTTP/1.1 403 Forbidden
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i http://192.168.15.9:8080/nao-existe.html
+------------------------------------------------------------------
+HTTP/1.1 404 Not Found
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>404 Not Found</title></head><body><h1>404 Not Found</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i -X POST -d a=1 http://192.168.15.9:8080/index.html
+------------------------------------------------------------------
+HTTP/1.1 405 Method Not Allowed
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 153
+Allow: GET, HEAD
+
+<!DOCTYPE html>
+<html><head><title>405 Method Not Allowed</title></head><body><h1>405 Method Not Allowed</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i -X DELETE http://192.168.15.9:8080/index.html
+------------------------------------------------------------------
+HTTP/1.1 405 Method Not Allowed
+Date: Sat, 03 Oct 2026 21:11:49 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 153
+Allow: GET, HEAD
+
+<!DOCTYPE html>
+<html><head><title>405 Method Not Allowed</title></head><body><h1>405 Method Not Allowed</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+

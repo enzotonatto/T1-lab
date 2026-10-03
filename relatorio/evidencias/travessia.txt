@@ -1,0 +1,60 @@
+==================================================================
+$ curl -s -i --path-as-is "http://192.168.15.9:8080/../../etc/passwd"
+------------------------------------------------------------------
+HTTP/1.1 403 Forbidden
+Date: Sat, 03 Oct 2026 21:11:58 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i --path-as-is "http://192.168.15.9:8080/%2e%2e/%2e%2e/etc/passwd"
+------------------------------------------------------------------
+HTTP/1.1 403 Forbidden
+Date: Sat, 03 Oct 2026 21:11:58 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i --path-as-is "http://192.168.15.9:8080/..%2f..%2f..%2fetc%2fpasswd"
+------------------------------------------------------------------
+HTTP/1.1 403 Forbidden
+Date: Sat, 03 Oct 2026 21:11:58 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i --path-as-is "http://192.168.15.9:8080/img/../../../etc/passwd"
+------------------------------------------------------------------
+HTTP/1.1 403 Forbidden
+Date: Sat, 03 Oct 2026 21:11:58 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+
+==================================================================
+$ curl -s -i --path-as-is "http://192.168.15.9:8080/%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd"
+------------------------------------------------------------------
+HTTP/1.1 403 Forbidden
+Date: Sat, 03 Oct 2026 21:11:58 GMT
+Server: LabRedes-T1-Grupo5/1.0
+Content-Type: text/html; charset=utf-8
+Content-Length: 135
+
+<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><h1>403 Forbidden</h1><p>LabRedes-T1-Grupo5/1.0</p></body></html>
+

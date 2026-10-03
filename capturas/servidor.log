@@ -1,0 +1,411 @@
+LabRedes-T1-Grupo5/1.0 escutando em 0.0.0.0:8080, raiz /Users/enzotonatto/Developer/T1-lab/www, timeout 5s
+17:58:43.814 [conn 1 | t1] conexão aberta de 192.168.15.9:49665
+17:58:43.815 [conn 1 | t1] "GET / HTTP/1.1" 200 1404B
+17:58:43.815 [conn 1 | t1] conexão fechada com 192.168.15.9:49665: EOF do cliente, 1 requisição(ões)
+18:00:45.186 [conn 2 | t2] conexão aberta de 192.168.15.15:47616
+18:00:45.187 [conn 2 | t2] "GET / HTTP/1.1" 200 1404B
+18:00:45.192 [conn 2 | t2] conexão fechada com 192.168.15.15:47616: EOF do cliente, 1 requisição(ões)
+18:04:01.150 [conn 3 | t3] conexão aberta de 192.168.15.15:35132
+18:04:01.151 [conn 3 | t3] "GET / HTTP/1.1" 200 1404B
+18:04:01.255 [conn 3 | t3] "GET /style.css HTTP/1.1" 200 340B
+18:04:01.257 [conn 4 | t4] conexão aberta de 192.168.15.15:35148
+18:04:01.258 [conn 4 | t4] "GET /app.js HTTP/1.1" 200 575B
+18:04:01.263 [conn 3 | t3] "GET /img/foto.jpg HTTP/1.1" 200 99297B
+18:04:01.264 [conn 4 | t4] "GET /img/logo.png HTTP/1.1" 200 18561B
+18:04:01.269 [conn 5 | t5] conexão aberta de 192.168.15.15:35156
+18:04:01.269 [conn 6 | t6] conexão aberta de 192.168.15.15:35172
+18:04:01.298 [conn 3 | t3] "GET /data/info.json HTTP/1.1" 200 156B
+18:04:01.305 [conn 3 | t3] "GET /favicon.ico HTTP/1.1" 200 3390B
+18:04:06.265 [conn 4 | t4] conexão fechada com 192.168.15.15:35148: timeout de 5s, 2 requisição(ões)
+18:04:06.270 [conn 5 | t5] conexão fechada com 192.168.15.15:35156: timeout de 5s, 0 requisição(ões)
+18:04:06.270 [conn 6 | t6] conexão fechada com 192.168.15.15:35172: timeout de 5s, 0 requisição(ões)
+18:04:06.307 [conn 3 | t3] conexão fechada com 192.168.15.15:35132: timeout de 5s, 5 requisição(ões)
+18:04:13.076 [conn 7 | t7] conexão aberta de 192.168.15.15:36710
+18:04:13.077 [conn 7 | t7] "GET /nao-existe.html HTTP/1.1" 404 135B
+18:04:17.118 [conn 7 | t7] "GET /medicao.html HTTP/1.1" 200 4636B
+18:04:21.932 [conn 7 | t7] "GET /texto.txt HTTP/1.1" 200 50B
+18:04:25.728 [conn 7 | t7] "GET /docs/exemplo.pdf HTTP/1.1" 200 608B
+18:04:25.901 [conn 8 | t8] conexão aberta de 192.168.15.15:36688
+18:04:27.666 [conn 8 | t8] conexão fechada com 192.168.15.15:36688: EOF do cliente, 0 requisição(ões)
+18:04:30.730 [conn 7 | t7] conexão fechada com 192.168.15.15:36710: timeout de 5s, 4 requisição(ões)
+18:11:49.490 [conn 9 | t9] conexão aberta de 192.168.15.15:39828
+18:11:49.491 [conn 9 | t9] "GET /index.html HTTP/1.1" 200 1404B
+18:11:49.497 [conn 9 | t9] conexão fechada com 192.168.15.15:39828: EOF do cliente, 1 requisição(ões)
+18:11:49.515 [conn 10 | t10] conexão aberta de 192.168.15.15:39844
+18:11:49.517 [conn 10 | t10] "HEAD /index.html HTTP/1.1" 200 0B
+18:11:49.523 [conn 10 | t10] conexão fechada com 192.168.15.15:39844: EOF do cliente, 1 requisição(ões)
+18:11:49.541 [conn 11 | t11] conexão aberta de 192.168.15.15:39856
+18:11:49.541 [conn 11 | t11] 400 Bad Request: request line inválida: 'GET /index.html extra HTTP/1.1'
+18:11:49.541 [conn 11 | t11] conexão fechada com 192.168.15.15:39856: 400 (request line inválida: 'GET /index.html extra HTTP/1.1'), 0 requisição(ões)
+18:11:49.564 [conn 12 | t12] conexão aberta de 192.168.15.15:39860
+18:11:49.564 [conn 12 | t12] 400 Bad Request: cabeçalho sem ':': b'CabecalhoSemDoisPontos'
+18:11:49.564 [conn 12 | t12] conexão fechada com 192.168.15.15:39860: 400 (cabeçalho sem ':': b'CabecalhoSemDoisPontos'), 0 requisição(ões)
+18:11:49.588 [conn 13 | t13] conexão aberta de 192.168.15.15:39866
+18:11:49.591 [conn 13 | t13] "GET /../../etc/passwd HTTP/1.1" 403 135B
+18:11:49.596 [conn 13 | t13] conexão fechada com 192.168.15.15:39866: EOF do cliente, 1 requisição(ões)
+18:11:49.613 [conn 14 | t14] conexão aberta de 192.168.15.15:39868
+18:11:49.613 [conn 14 | t14] "GET /nao-existe.html HTTP/1.1" 404 135B
+18:11:49.619 [conn 14 | t14] conexão fechada com 192.168.15.15:39868: EOF do cliente, 1 requisição(ões)
+18:11:49.637 [conn 15 | t15] conexão aberta de 192.168.15.15:39870
+18:11:49.637 [conn 15 | t15] "POST /index.html HTTP/1.1" 405 153B
+18:11:49.643 [conn 15 | t15] conexão fechada com 192.168.15.15:39870: EOF do cliente, 1 requisição(ões)
+18:11:49.661 [conn 16 | t16] conexão aberta de 192.168.15.15:39880
+18:11:49.661 [conn 16 | t16] "DELETE /index.html HTTP/1.1" 405 153B
+18:11:49.666 [conn 16 | t16] conexão fechada com 192.168.15.15:39880: EOF do cliente, 1 requisição(ões)
+18:11:58.769 [conn 17 | t17] conexão aberta de 192.168.15.15:35356
+18:11:58.770 [conn 17 | t17] "GET /../../etc/passwd HTTP/1.1" 403 135B
+18:11:58.774 [conn 17 | t17] conexão fechada com 192.168.15.15:35356: EOF do cliente, 1 requisição(ões)
+18:11:58.792 [conn 18 | t18] conexão aberta de 192.168.15.15:35368
+18:11:58.793 [conn 18 | t18] "GET /%2e%2e/%2e%2e/etc/passwd HTTP/1.1" 403 135B
+18:11:58.884 [conn 18 | t18] conexão fechada com 192.168.15.15:35368: EOF do cliente, 1 requisição(ões)
+18:11:58.890 [conn 19 | t19] conexão aberta de 192.168.15.15:35376
+18:11:58.891 [conn 19 | t19] "GET /..%2f..%2f..%2fetc%2fpasswd HTTP/1.1" 403 135B
+18:11:58.896 [conn 19 | t19] conexão fechada com 192.168.15.15:35376: EOF do cliente, 1 requisição(ões)
+18:11:58.915 [conn 20 | t20] conexão aberta de 192.168.15.15:35384
+18:11:58.916 [conn 20 | t20] "GET /img/../../../etc/passwd HTTP/1.1" 403 135B
+18:11:58.921 [conn 20 | t20] conexão fechada com 192.168.15.15:35384: EOF do cliente, 1 requisição(ões)
+18:11:58.939 [conn 21 | t21] conexão aberta de 192.168.15.15:35400
+18:11:58.939 [conn 21 | t21] "GET /%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd HTTP/1.1" 403 135B
+18:11:58.944 [conn 21 | t21] conexão fechada com 192.168.15.15:35400: EOF do cliente, 1 requisição(ões)
+18:17:10.053 [conn 22 | t22] conexão aberta de 192.168.15.15:60036
+18:17:10.054 [conn 22 | t22] "GET /index.html HTTP/1.1" 200 1404B
+18:17:10.059 [conn 22 | t22] conexão fechada com 192.168.15.15:60036: EOF do cliente, 1 requisição(ões)
+18:19:39.241 [conn 23 | t23] conexão aberta de 192.168.15.8:60947
+18:19:39.250 [conn 24 | t24] conexão aberta de 192.168.15.8:60949
+18:19:39.251 [conn 24 | t24] "GET / HTTP/1.1" 200 1404B
+18:19:39.410 [conn 23 | t23] "GET /style.css HTTP/1.1" 200 340B
+18:19:39.410 [conn 24 | t24] "GET /img/logo.png HTTP/1.1" 200 18561B
+18:19:39.423 [conn 25 | t25] conexão aberta de 192.168.15.8:60951
+18:19:39.424 [conn 25 | t25] "GET /app.js HTTP/1.1" 200 575B
+18:19:39.424 [conn 23 | t23] "GET /img/foto.jpg HTTP/1.1" 200 99297B
+18:19:39.437 [conn 24 | t24] "GET /data/info.json HTTP/1.1" 200 156B
+18:19:39.460 [conn 25 | t25] "GET /favicon.ico HTTP/1.1" 200 3390B
+18:19:44.425 [conn 23 | t23] conexão fechada com 192.168.15.8:60947: timeout de 5s, 2 requisição(ões)
+18:19:44.438 [conn 24 | t24] conexão fechada com 192.168.15.8:60949: timeout de 5s, 3 requisição(ões)
+18:19:44.461 [conn 25 | t25] conexão fechada com 192.168.15.8:60951: timeout de 5s, 2 requisição(ões)
+18:19:50.881 [conn 26 | t26] conexão aberta de 192.168.15.15:48744
+18:19:50.886 [conn 27 | t27] conexão aberta de 192.168.15.15:48748
+18:19:50.887 [conn 27 | t27] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:50.887 [conn 27 | t27] conexão fechada com 192.168.15.15:48748: Connection: close, 1 requisição(ões)
+18:19:51.937 [conn 28 | t28] conexão aberta de 192.168.15.15:48752
+18:19:51.938 [conn 28 | t28] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:51.939 [conn 28 | t28] conexão fechada com 192.168.15.15:48752: Connection: close, 1 requisição(ões)
+18:19:52.960 [conn 29 | t29] conexão aberta de 192.168.15.15:48764
+18:19:52.962 [conn 29 | t29] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:52.962 [conn 29 | t29] conexão fechada com 192.168.15.15:48764: Connection: close, 1 requisição(ões)
+18:19:54.083 [conn 30 | t30] conexão aberta de 192.168.15.15:48774
+18:19:54.084 [conn 30 | t30] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:54.084 [conn 30 | t30] conexão fechada com 192.168.15.15:48774: Connection: close, 1 requisição(ões)
+18:19:54.957 [conn 31 | t31] conexão aberta de 192.168.15.15:60466
+18:19:54.958 [conn 31 | t31] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:54.958 [conn 31 | t31] conexão fechada com 192.168.15.15:60466: Connection: close, 1 requisição(ões)
+18:19:55.303 [conn 32 | t32] conexão aberta de 192.168.15.8:60952
+18:19:55.303 [conn 32 | t32] "GET / HTTP/1.1" 200 1404B
+18:19:55.318 [conn 32 | t32] "GET /style.css HTTP/1.1" 200 340B
+18:19:55.324 [conn 33 | t33] conexão aberta de 192.168.15.8:60953
+18:19:55.324 [conn 33 | t33] "GET /img/logo.png HTTP/1.1" 200 18561B
+18:19:55.327 [conn 34 | t34] conexão aberta de 192.168.15.8:60954
+18:19:55.327 [conn 34 | t34] "GET /app.js HTTP/1.1" 200 575B
+18:19:55.329 [conn 32 | t32] "GET /img/foto.jpg HTTP/1.1" 200 99297B
+18:19:55.336 [conn 34 | t34] "GET /data/info.json HTTP/1.1" 200 156B
+18:19:56.131 [conn 35 | t35] conexão aberta de 192.168.15.15:60472
+18:19:56.132 [conn 35 | t35] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:56.132 [conn 35 | t35] conexão fechada com 192.168.15.15:60472: Connection: close, 1 requisição(ões)
+18:19:56.681 [conn 33 | t33] "GET / HTTP/1.1" 200 1404B
+18:19:56.694 [conn 34 | t34] "GET /style.css HTTP/1.1" 200 340B
+18:19:56.695 [conn 32 | t32] "GET /img/logo.png HTTP/1.1" 200 18561B
+18:19:56.695 [conn 33 | t33] "GET /app.js HTTP/1.1" 200 575B
+18:19:56.706 [conn 34 | t34] "GET /img/foto.jpg HTTP/1.1" 200 99297B
+18:19:56.707 [conn 32 | t32] "GET /data/info.json HTTP/1.1" 200 156B
+18:19:56.892 [conn 36 | t36] conexão aberta de 192.168.15.15:60474
+18:19:56.893 [conn 36 | t36] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:56.893 [conn 36 | t36] conexão fechada com 192.168.15.15:60474: Connection: close, 1 requisição(ões)
+18:19:57.894 [conn 37 | t37] conexão aberta de 192.168.15.15:60486
+18:19:57.895 [conn 37 | t37] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:57.895 [conn 37 | t37] conexão fechada com 192.168.15.15:60486: Connection: close, 1 requisição(ões)
+18:19:58.143 [conn 33 | t33] "GET / HTTP/1.1" 200 1404B
+18:19:58.154 [conn 32 | t32] "GET /style.css HTTP/1.1" 200 340B
+18:19:58.155 [conn 34 | t34] "GET /img/logo.png HTTP/1.1" 200 18561B
+18:19:58.156 [conn 33 | t33] "GET /app.js HTTP/1.1" 200 575B
+18:19:58.164 [conn 32 | t32] "GET /img/foto.jpg HTTP/1.1" 200 99297B
+18:19:58.165 [conn 34 | t34] "GET /data/info.json HTTP/1.1" 200 156B
+18:19:58.895 [conn 38 | t38] conexão aberta de 192.168.15.15:60498
+18:19:58.896 [conn 38 | t38] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:58.896 [conn 38 | t38] conexão fechada com 192.168.15.15:60498: Connection: close, 1 requisição(ões)
+18:19:59.561 [conn 33 | t33] "GET / HTTP/1.1" 200 1404B
+18:19:59.579 [conn 34 | t34] "GET /style.css HTTP/1.1" 200 340B
+18:19:59.672 [conn 33 | t33] "GET /app.js HTTP/1.1" 200 575B
+18:19:59.672 [conn 32 | t32] "GET /img/logo.png HTTP/1.1" 200 18561B
+18:19:59.683 [conn 34 | t34] "GET /img/foto.jpg HTTP/1.1" 200 99297B
+18:19:59.689 [conn 33 | t33] "GET /data/info.json HTTP/1.1" 200 156B
+18:19:59.895 [conn 39 | t39] conexão aberta de 192.168.15.15:60512
+18:19:59.896 [conn 39 | t39] "GET /texto.txt HTTP/1.1" 200 50B
+18:19:59.896 [conn 39 | t39] conexão fechada com 192.168.15.15:60512: Connection: close, 1 requisição(ões)
+18:20:00.949 [conn 40 | t40] conexão aberta de 192.168.15.15:60526
+18:20:00.950 [conn 40 | t40] "GET /texto.txt HTTP/1.1" 200 50B
+18:20:00.950 [conn 40 | t40] conexão fechada com 192.168.15.15:60526: Connection: close, 1 requisição(ões)
+18:20:01.973 [conn 41 | t41] conexão aberta de 192.168.15.15:60542
+18:20:01.974 [conn 41 | t41] "GET /texto.txt HTTP/1.1" 200 50B
+18:20:01.974 [conn 41 | t41] conexão fechada com 192.168.15.15:60542: Connection: close, 1 requisição(ões)
+18:20:03.094 [conn 42 | t42] conexão aberta de 192.168.15.15:60554
+18:20:03.095 [conn 42 | t42] "GET /texto.txt HTTP/1.1" 200 50B
+18:20:03.095 [conn 42 | t42] conexão fechada com 192.168.15.15:60554: Connection: close, 1 requisição(ões)
+18:20:03.900 [conn 43 | t43] conexão aberta de 192.168.15.15:60566
+18:20:03.901 [conn 43 | t43] "GET /texto.txt HTTP/1.1" 200 50B
+18:20:03.901 [conn 43 | t43] conexão fechada com 192.168.15.15:60566: Connection: close, 1 requisição(ões)
+18:20:04.673 [conn 32 | t32] conexão fechada com 192.168.15.8:60952: timeout de 5s, 8 requisição(ões)
+18:20:04.683 [conn 34 | t34] conexão fechada com 192.168.15.8:60954: timeout de 5s, 8 requisição(ões)
+18:20:04.690 [conn 33 | t33] conexão fechada com 192.168.15.8:60953: timeout de 5s, 8 requisição(ões)
+18:20:04.918 [conn 44 | t44] conexão aberta de 192.168.15.15:51564
+18:20:04.919 [conn 44 | t44] "GET /texto.txt HTTP/1.1" 200 50B
+18:20:04.919 [conn 44 | t44] conexão fechada com 192.168.15.15:51564: Connection: close, 1 requisição(ões)
+18:20:06.063 [conn 26 | t26] "GET /index.html HTTP/1.1" 200 1404B
+18:20:06.063 [conn 26 | t26] conexão fechada com 192.168.15.15:48744: Connection: close, 1 requisição(ões)
+18:28:11.813 [conn 45 | t45] conexão aberta de 192.168.15.15:59458
+18:28:11.818 [conn 46 | t46] conexão aberta de 192.168.15.15:59466
+18:28:11.819 [conn 46 | t46] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:11.819 [conn 46 | t46] conexão fechada com 192.168.15.15:59466: Connection: close, 1 requisição(ões)
+18:28:12.854 [conn 47 | t47] conexão aberta de 192.168.15.15:59468
+18:28:12.855 [conn 47 | t47] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:12.855 [conn 47 | t47] conexão fechada com 192.168.15.15:59468: Connection: close, 1 requisição(ões)
+18:28:13.908 [conn 48 | t48] conexão aberta de 192.168.15.15:59480
+18:28:13.909 [conn 48 | t48] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:13.909 [conn 48 | t48] conexão fechada com 192.168.15.15:59480: Connection: close, 1 requisição(ões)
+18:28:14.825 [conn 49 | t49] conexão aberta de 192.168.15.15:51458
+18:28:14.826 [conn 49 | t49] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:14.826 [conn 49 | t49] conexão fechada com 192.168.15.15:51458: Connection: close, 1 requisição(ões)
+18:28:15.825 [conn 50 | t50] conexão aberta de 192.168.15.15:51470
+18:28:15.826 [conn 50 | t50] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:15.826 [conn 50 | t50] conexão fechada com 192.168.15.15:51470: Connection: close, 1 requisição(ões)
+18:28:16.879 [conn 51 | t51] conexão aberta de 192.168.15.15:51476
+18:28:16.880 [conn 51 | t51] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:16.880 [conn 51 | t51] conexão fechada com 192.168.15.15:51476: Connection: close, 1 requisição(ões)
+18:28:17.859 [conn 52 | t52] conexão aberta de 192.168.15.15:51492
+18:28:17.860 [conn 52 | t52] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:17.860 [conn 52 | t52] conexão fechada com 192.168.15.15:51492: Connection: close, 1 requisição(ões)
+18:28:18.907 [conn 53 | t53] conexão aberta de 192.168.15.15:51500
+18:28:18.908 [conn 53 | t53] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:18.908 [conn 53 | t53] conexão fechada com 192.168.15.15:51500: Connection: close, 1 requisição(ões)
+18:28:19.846 [conn 54 | t54] conexão aberta de 192.168.15.15:51516
+18:28:19.847 [conn 54 | t54] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:19.847 [conn 54 | t54] conexão fechada com 192.168.15.15:51516: Connection: close, 1 requisição(ões)
+18:28:20.831 [conn 55 | t55] conexão aberta de 192.168.15.15:51532
+18:28:20.832 [conn 55 | t55] "GET /texto.txt HTTP/1.1" 200 50B
+18:28:20.832 [conn 55 | t55] conexão fechada com 192.168.15.15:51532: Connection: close, 1 requisição(ões)
+18:28:21.813 [conn 45 | t45] conexão fechada com 192.168.15.15:59458: EOF do cliente, 0 requisição(ões)
+18:29:23.925 [conn 56 | t56] conexão aberta de 192.168.15.15:35216
+18:29:23.929 [conn 57 | t57] conexão aberta de 192.168.15.15:35220
+18:29:23.930 [conn 57 | t57] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:23.930 [conn 57 | t57] conexão fechada com 192.168.15.15:35220: Connection: close, 1 requisição(ões)
+18:29:24.974 [conn 58 | t58] conexão aberta de 192.168.15.15:46706
+18:29:24.975 [conn 58 | t58] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:24.975 [conn 58 | t58] conexão fechada com 192.168.15.15:46706: Connection: close, 1 requisição(ões)
+18:29:26.020 [conn 59 | t59] conexão aberta de 192.168.15.15:46710
+18:29:26.021 [conn 59 | t59] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:26.021 [conn 59 | t59] conexão fechada com 192.168.15.15:46710: Connection: close, 1 requisição(ões)
+18:29:26.936 [conn 60 | t60] conexão aberta de 192.168.15.15:46722
+18:29:26.937 [conn 60 | t60] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:26.937 [conn 60 | t60] conexão fechada com 192.168.15.15:46722: Connection: close, 1 requisição(ões)
+18:29:27.951 [conn 61 | t61] conexão aberta de 192.168.15.15:46734
+18:29:27.951 [conn 61 | t61] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:27.952 [conn 61 | t61] conexão fechada com 192.168.15.15:46734: Connection: close, 1 requisição(ões)
+18:29:28.936 [conn 62 | t62] conexão aberta de 192.168.15.15:46736
+18:29:28.937 [conn 62 | t62] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:28.937 [conn 62 | t62] conexão fechada com 192.168.15.15:46736: Connection: close, 1 requisição(ões)
+18:29:29.939 [conn 63 | t63] conexão aberta de 192.168.15.15:46740
+18:29:29.940 [conn 63 | t63] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:29.940 [conn 63 | t63] conexão fechada com 192.168.15.15:46740: Connection: close, 1 requisição(ões)
+18:29:30.944 [conn 64 | t64] conexão aberta de 192.168.15.15:46754
+18:29:30.945 [conn 64 | t64] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:30.945 [conn 64 | t64] conexão fechada com 192.168.15.15:46754: Connection: close, 1 requisição(ões)
+18:29:31.953 [conn 65 | t65] conexão aberta de 192.168.15.15:46770
+18:29:31.954 [conn 65 | t65] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:31.954 [conn 65 | t65] conexão fechada com 192.168.15.15:46770: Connection: close, 1 requisição(ões)
+18:29:32.941 [conn 66 | t66] conexão aberta de 192.168.15.15:46784
+18:29:32.942 [conn 66 | t66] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:32.942 [conn 66 | t66] conexão fechada com 192.168.15.15:46784: Connection: close, 1 requisição(ões)
+18:29:33.982 [conn 67 | t67] conexão aberta de 192.168.15.15:46786
+18:29:33.983 [conn 67 | t67] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:33.983 [conn 67 | t67] conexão fechada com 192.168.15.15:46786: Connection: close, 1 requisição(ões)
+18:29:35.008 [conn 68 | t68] conexão aberta de 192.168.15.15:53404
+18:29:35.009 [conn 68 | t68] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:35.009 [conn 68 | t68] conexão fechada com 192.168.15.15:53404: Connection: close, 1 requisição(ões)
+18:29:36.036 [conn 69 | t69] conexão aberta de 192.168.15.15:53412
+18:29:36.037 [conn 69 | t69] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:36.038 [conn 69 | t69] conexão fechada com 192.168.15.15:53412: Connection: close, 1 requisição(ões)
+18:29:37.037 [conn 70 | t70] conexão aberta de 192.168.15.15:53416
+18:29:37.038 [conn 70 | t70] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:37.039 [conn 70 | t70] conexão fechada com 192.168.15.15:53416: Connection: close, 1 requisição(ões)
+18:29:37.946 [conn 71 | t71] conexão aberta de 192.168.15.15:53422
+18:29:37.946 [conn 71 | t71] "GET /texto.txt HTTP/1.1" 200 50B
+18:29:37.947 [conn 71 | t71] conexão fechada com 192.168.15.15:53422: Connection: close, 1 requisição(ões)
+18:29:38.943 [conn 56 | t56] "GET /index.html HTTP/1.1" 200 1404B
+18:29:38.943 [conn 56 | t56] conexão fechada com 192.168.15.15:35216: Connection: close, 1 requisição(ões)
+18:30:43.769 [conn 72 | t72] conexão aberta de 192.168.15.15:38824
+18:30:43.770 [conn 72 | t72] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.771 [conn 72 | t72] conexão fechada com 192.168.15.15:38824: Connection: close, 1 requisição(ões)
+18:30:43.784 [conn 73 | t73] conexão aberta de 192.168.15.15:38836
+18:30:43.784 [conn 73 | t73] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.784 [conn 73 | t73] conexão fechada com 192.168.15.15:38836: Connection: close, 1 requisição(ões)
+18:30:43.799 [conn 74 | t74] conexão aberta de 192.168.15.15:38850
+18:30:43.800 [conn 74 | t74] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.800 [conn 74 | t74] conexão fechada com 192.168.15.15:38850: Connection: close, 1 requisição(ões)
+18:30:43.815 [conn 75 | t75] conexão aberta de 192.168.15.15:38858
+18:30:43.816 [conn 75 | t75] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.816 [conn 75 | t75] conexão fechada com 192.168.15.15:38858: Connection: close, 1 requisição(ões)
+18:30:43.829 [conn 76 | t76] conexão aberta de 192.168.15.15:38862
+18:30:43.831 [conn 76 | t76] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.831 [conn 76 | t76] conexão fechada com 192.168.15.15:38862: Connection: close, 1 requisição(ões)
+18:30:43.845 [conn 77 | t77] conexão aberta de 192.168.15.15:38878
+18:30:43.845 [conn 77 | t77] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.845 [conn 77 | t77] conexão fechada com 192.168.15.15:38878: Connection: close, 1 requisição(ões)
+18:30:43.856 [conn 78 | t78] conexão aberta de 192.168.15.15:38888
+18:30:43.856 [conn 78 | t78] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.856 [conn 78 | t78] conexão fechada com 192.168.15.15:38888: Connection: close, 1 requisição(ões)
+18:30:43.870 [conn 79 | t79] conexão aberta de 192.168.15.15:38896
+18:30:43.870 [conn 79 | t79] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.871 [conn 79 | t79] conexão fechada com 192.168.15.15:38896: Connection: close, 1 requisição(ões)
+18:30:43.885 [conn 80 | t80] conexão aberta de 192.168.15.15:38904
+18:30:43.885 [conn 80 | t80] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.885 [conn 80 | t80] conexão fechada com 192.168.15.15:38904: Connection: close, 1 requisição(ões)
+18:30:43.899 [conn 81 | t81] conexão aberta de 192.168.15.15:38906
+18:30:43.900 [conn 81 | t81] "GET /medicao.html HTTP/1.1" 200 4636B
+18:30:43.900 [conn 81 | t81] conexão fechada com 192.168.15.15:38906: Connection: close, 1 requisição(ões)
+18:31:26.792 [conn 82 | t82] conexão aberta de 192.168.15.15:43616
+18:31:26.793 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.799 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.803 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.809 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.814 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.821 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.826 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.833 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.838 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.843 [conn 82 | t82] "GET /medicao.html HTTP/1.1" 200 4636B
+18:31:26.847 [conn 82 | t82] conexão fechada com 192.168.15.15:43616: EOF do cliente, 10 requisição(ões)
+18:33:16.306 [conn 83 | t83] conexão aberta de 192.168.15.15:51442
+18:33:16.307 [conn 83 | t83] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.307 [conn 83 | t83] conexão fechada com 192.168.15.15:51442: Connection: close, 1 requisição(ões)
+18:33:16.319 [conn 84 | t84] conexão aberta de 192.168.15.15:51450
+18:33:16.320 [conn 84 | t84] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.320 [conn 84 | t84] conexão fechada com 192.168.15.15:51450: Connection: close, 1 requisição(ões)
+18:33:16.334 [conn 85 | t85] conexão aberta de 192.168.15.15:51460
+18:33:16.335 [conn 85 | t85] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.335 [conn 85 | t85] conexão fechada com 192.168.15.15:51460: Connection: close, 1 requisição(ões)
+18:33:16.347 [conn 86 | t86] conexão aberta de 192.168.15.15:51476
+18:33:16.348 [conn 86 | t86] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.348 [conn 86 | t86] conexão fechada com 192.168.15.15:51476: Connection: close, 1 requisição(ões)
+18:33:16.358 [conn 87 | t87] conexão aberta de 192.168.15.15:51492
+18:33:16.359 [conn 87 | t87] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.359 [conn 87 | t87] conexão fechada com 192.168.15.15:51492: Connection: close, 1 requisição(ões)
+18:33:16.371 [conn 88 | t88] conexão aberta de 192.168.15.15:51500
+18:33:16.372 [conn 88 | t88] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.372 [conn 88 | t88] conexão fechada com 192.168.15.15:51500: Connection: close, 1 requisição(ões)
+18:33:16.384 [conn 89 | t89] conexão aberta de 192.168.15.15:51506
+18:33:16.385 [conn 89 | t89] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.385 [conn 89 | t89] conexão fechada com 192.168.15.15:51506: Connection: close, 1 requisição(ões)
+18:33:16.395 [conn 90 | t90] conexão aberta de 192.168.15.15:51518
+18:33:16.396 [conn 90 | t90] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.396 [conn 90 | t90] conexão fechada com 192.168.15.15:51518: Connection: close, 1 requisição(ões)
+18:33:16.419 [conn 91 | t91] conexão aberta de 192.168.15.15:51522
+18:33:16.419 [conn 91 | t91] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.419 [conn 91 | t91] conexão fechada com 192.168.15.15:51522: Connection: close, 1 requisição(ões)
+18:33:16.431 [conn 92 | t92] conexão aberta de 192.168.15.15:51536
+18:33:16.431 [conn 92 | t92] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:16.431 [conn 92 | t92] conexão fechada com 192.168.15.15:51536: Connection: close, 1 requisição(ões)
+18:33:27.877 [conn 93 | t93] conexão aberta de 192.168.15.15:57906
+18:33:27.878 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.885 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.890 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.895 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.901 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.906 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.910 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.915 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.920 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.924 [conn 93 | t93] "GET /medicao.html HTTP/1.1" 200 4636B
+18:33:27.931 [conn 93 | t93] conexão fechada com 192.168.15.15:57906: EOF do cliente, 10 requisição(ões)
+18:34:06.890 [conn 94 | t94] conexão aberta de 192.168.15.15:48034
+18:34:06.892 [conn 94 | t94] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:06.892 [conn 94 | t94] conexão fechada com 192.168.15.15:48034: Connection: close, 1 requisição(ões)
+18:34:06.903 [conn 95 | t95] conexão aberta de 192.168.15.15:48046
+18:34:06.904 [conn 95 | t95] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:06.904 [conn 95 | t95] conexão fechada com 192.168.15.15:48046: Connection: close, 1 requisição(ões)
+18:34:06.920 [conn 96 | t96] conexão aberta de 192.168.15.15:48058
+18:34:06.920 [conn 96 | t96] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:06.920 [conn 96 | t96] conexão fechada com 192.168.15.15:48058: Connection: close, 1 requisição(ões)
+18:34:06.935 [conn 97 | t97] conexão aberta de 192.168.15.15:48064
+18:34:06.935 [conn 97 | t97] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:06.936 [conn 97 | t97] conexão fechada com 192.168.15.15:48064: Connection: close, 1 requisição(ões)
+18:34:06.949 [conn 98 | t98] conexão aberta de 192.168.15.15:48068
+18:34:06.949 [conn 98 | t98] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:06.949 [conn 98 | t98] conexão fechada com 192.168.15.15:48068: Connection: close, 1 requisição(ões)
+18:34:07.049 [conn 99 | t99] conexão aberta de 192.168.15.15:48080
+18:34:07.049 [conn 99 | t99] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:07.049 [conn 99 | t99] conexão fechada com 192.168.15.15:48080: Connection: close, 1 requisição(ões)
+18:34:07.061 [conn 100 | t100] conexão aberta de 192.168.15.15:48088
+18:34:07.061 [conn 100 | t100] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:07.061 [conn 100 | t100] conexão fechada com 192.168.15.15:48088: Connection: close, 1 requisição(ões)
+18:34:07.075 [conn 101 | t101] conexão aberta de 192.168.15.15:48096
+18:34:07.075 [conn 101 | t101] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:07.075 [conn 101 | t101] conexão fechada com 192.168.15.15:48096: Connection: close, 1 requisição(ões)
+18:34:07.088 [conn 102 | t102] conexão aberta de 192.168.15.15:48098
+18:34:07.088 [conn 102 | t102] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:07.088 [conn 102 | t102] conexão fechada com 192.168.15.15:48098: Connection: close, 1 requisição(ões)
+18:34:07.101 [conn 103 | t103] conexão aberta de 192.168.15.15:48104
+18:34:07.101 [conn 103 | t103] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:07.101 [conn 103 | t103] conexão fechada com 192.168.15.15:48104: Connection: close, 1 requisição(ões)
+18:34:25.126 [conn 104 | t104] conexão aberta de 192.168.15.15:50668
+18:34:25.129 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.136 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.141 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.146 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.151 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.155 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.160 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.165 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.169 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.175 [conn 104 | t104] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:25.180 [conn 104 | t104] conexão fechada com 192.168.15.15:50668: EOF do cliente, 10 requisição(ões)
+18:34:55.023 [conn 105 | t105] conexão aberta de 192.168.15.15:52384
+18:34:55.024 [conn 105 | t105] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.024 [conn 105 | t105] conexão fechada com 192.168.15.15:52384: Connection: close, 1 requisição(ões)
+18:34:55.038 [conn 106 | t106] conexão aberta de 192.168.15.15:52396
+18:34:55.038 [conn 106 | t106] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.038 [conn 106 | t106] conexão fechada com 192.168.15.15:52396: Connection: close, 1 requisição(ões)
+18:34:55.053 [conn 107 | t107] conexão aberta de 192.168.15.15:52402
+18:34:55.054 [conn 107 | t107] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.054 [conn 107 | t107] conexão fechada com 192.168.15.15:52402: Connection: close, 1 requisição(ões)
+18:34:55.064 [conn 108 | t108] conexão aberta de 192.168.15.15:52408
+18:34:55.066 [conn 108 | t108] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.066 [conn 108 | t108] conexão fechada com 192.168.15.15:52408: Connection: close, 1 requisição(ões)
+18:34:55.078 [conn 109 | t109] conexão aberta de 192.168.15.15:52422
+18:34:55.079 [conn 109 | t109] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.079 [conn 109 | t109] conexão fechada com 192.168.15.15:52422: Connection: close, 1 requisição(ões)
+18:34:55.091 [conn 110 | t110] conexão aberta de 192.168.15.15:52438
+18:34:55.092 [conn 110 | t110] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.092 [conn 110 | t110] conexão fechada com 192.168.15.15:52438: Connection: close, 1 requisição(ões)
+18:34:55.103 [conn 111 | t111] conexão aberta de 192.168.15.15:52440
+18:34:55.104 [conn 111 | t111] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.104 [conn 111 | t111] conexão fechada com 192.168.15.15:52440: Connection: close, 1 requisição(ões)
+18:34:55.116 [conn 112 | t112] conexão aberta de 192.168.15.15:52446
+18:34:55.116 [conn 112 | t112] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.116 [conn 112 | t112] conexão fechada com 192.168.15.15:52446: Connection: close, 1 requisição(ões)
+18:34:55.128 [conn 113 | t113] conexão aberta de 192.168.15.15:52448
+18:34:55.130 [conn 113 | t113] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.130 [conn 113 | t113] conexão fechada com 192.168.15.15:52448: Connection: close, 1 requisição(ões)
+18:34:55.140 [conn 114 | t114] conexão aberta de 192.168.15.15:52456
+18:34:55.141 [conn 114 | t114] "GET /medicao.html HTTP/1.1" 200 4636B
+18:34:55.141 [conn 114 | t114] conexão fechada com 192.168.15.15:52456: Connection: close, 1 requisição(ões)
+18:35:08.503 [conn 115 | t115] conexão aberta de 192.168.15.15:47824
+18:35:08.505 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.512 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.517 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.522 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.528 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.533 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.540 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.545 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.551 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.555 [conn 115 | t115] "GET /medicao.html HTTP/1.1" 200 4636B
+18:35:08.561 [conn 115 | t115] conexão fechada com 192.168.15.15:47824: EOF do cliente, 10 requisição(ões)

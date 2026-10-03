@@ -1,0 +1,2 @@
+
+RTT (50 respostas): mínimo 4.50 ms | mediana 7.04 ms | média 14.06 ms | máximo 90.40 ms
