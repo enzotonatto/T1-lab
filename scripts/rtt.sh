@@ -7,6 +7,10 @@
 HOST=${1:?uso: $0 <ip-do-servidor> [quantidade]}
 COUNT=${2:-50}
 
+# idioma neutro: em português o ping do Linux espera vírgula decimal ("0,2") e escreve
+# "tempo=" em vez de "time=", e o awk lê "61.2" como 61. Assim funciona em qualquer sistema.
+export LC_ALL=C
+
 ping -c "$COUNT" -i 0.2 "$HOST" | tee /dev/stderr \
   | grep -oE 'time[=<][0-9.]+' | cut -c6- | sort -n \
   | awk '{ v[NR] = $1; sum += $1 }
