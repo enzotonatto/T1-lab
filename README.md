@@ -99,7 +99,8 @@ keep-alive, `Connection: close`, HTTP/1.0, timeout ocioso e cliente lento.
 |---|---|---|
 | `scripts/conformidade.sh <ip> [porta]` | um `curl` por status obrigatório | item 2 |
 | `scripts/travessia.sh <ip> [porta]` | 5 tentativas de travessia (3 com percent-encoding) | item 3 |
-| `scripts/simultaneo.sh <ip> [porta]` | conexão lenta + requisições rápidas; rodar nas 2 máquinas ao mesmo tempo | item 5 |
+| `scripts/simultaneo.sh <ip> [porta]` | conexão lenta + requisições rápidas, enquanto outra máquina acessa o servidor | item 5 |
+| `scripts/rtt.sh <ip> [quantidade]` | ping com mínimo, mediana, média e máximo (Linux/macOS) | item 6 |
 | `scripts/c1.sh <ip> [porta] [recurso]` | 10 requisições, uma conexão nova cada (`Connection: close`) | itens 7–9 |
 | `scripts/c2.sh <ip> [porta] [recurso]` | 10 requisições numa única conexão persistente | itens 7–9 |
 | `scripts/metricas.py <pcap> [--port N]` | extrai handshakes, pacotes, bytes, tempo e overhead de uma captura | itens 7–8 |
@@ -108,7 +109,7 @@ O recurso padrão das medições é `/medicao.html` (~4,6 KB).
 
 ## Procedimento de medição (C1 e C2)
 
-1. Máquina cliente: `ping -c 20 <ip-servidor>` e anotar o RTT médio.
+1. Máquina cliente: `scripts/rtt.sh <ip-servidor> | tee ping_N.txt` e anotar a mediana.
 2. Máquina servidor: `python3 server.py --port 8080 --root ./www`.
 3. Máquina servidor: iniciar a captura (Wireshark com filtro de captura
    `tcp port 8080`, ou pelo terminal):
