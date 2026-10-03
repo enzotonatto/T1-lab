@@ -209,6 +209,17 @@ class ServerTest(unittest.TestCase):
         status, _, body = sock.read_response()
         self.assertEqual((status, body), (200, b"txt"))
 
+    def test_body_split_across_sends_is_discarded(self):
+        # corpo maior que um recv(), chegando em pedaços, seguido de outra requisição
+        sock = self.connect()
+        body = b"x" * 20000
+        sock.sendall(b"POST / HTTP/1.1\r\nHost: x\r\nContent-Length: %d\r\n\r\n" % len(body) + body[:3000])
+        time.sleep(0.05)
+        sock.sendall(body[3000:] + b"GET /a.txt HTTP/1.1\r\nHost: x\r\n\r\n")
+        self.assertEqual(sock.read_response()[0], 405)
+        status, _, response_body = sock.read_response()
+        self.assertEqual((status, response_body), (200, b"txt"))
+
     def test_400_cases(self):
         cases = [
             b"GARBAGE\r\n\r\n",
@@ -258,11 +269,22 @@ class ServerTest(unittest.TestCase):
         self.assertEqual(status, 403)
         self.assertNotIn(b"segredo", body)
 
-    @unittest.skipUnless(os.name == "nt", "caminhos com drive e nomes reservados só existem no Windows")
-    def test_windows_drive_and_reserved_names_403(self):
-        for target in ("/C:/Windows/win.ini", "/D:/x.txt", "/CON", "/NUL"):
+    @unittest.skipUnless(os.name == "nt", "caminhos com drive só existem no Windows")
+    def test_windows_drive_paths_403(self):
+        for target in ("/C:/Windows/win.ini", "/D:/x.txt"):
             with self.subTest(target=target):
                 self.assertEqual(self.get(target)[0], 403)
+
+    @unittest.skipUnless(os.name == "nt", "nomes de dispositivo só existem no Windows")
+    def test_windows_reserved_names_not_served(self):
+        # Até o Python 3.12, realpath transforma www\CON em \\.\CON (fora do root: 403).
+        # A partir do 3.13 o caminho fica dentro do root e isfile() é falso (404).
+        # Os dois são seguros: o dispositivo nunca é aberto.
+        for target in ("/CON", "/NUL"):
+            with self.subTest(target=target):
+                status, _, body = self.get(target)
+                self.assertIn(status, (403, 404))
+                self.assertIn(str(status).encode(), body)
 
     def test_dotdot_inside_root_is_allowed(self):
         status, _, body = self.get("/sub/../a.txt")
@@ -341,10 +363,6 @@ class ServerTest(unittest.TestCase):
         self.assertEqual(slow.read_response()[0], 200)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 @unittest.skipUnless(socket.has_ipv6, "sistema sem IPv6")
 class DualStackTest(unittest.TestCase):
     """Com --host :: o mesmo socket atende IPv6 e IPv4."""
@@ -373,3 +391,7 @@ class DualStackTest(unittest.TestCase):
                 client.sendall(b"GET /a.txt HTTP/1.1\r\nHost: x\r\n\r\n")
                 status, _, body = client.read_response()
                 self.assertEqual((status, body), (200, b"txt"))
+
+
+if __name__ == "__main__":
+    unittest.main()

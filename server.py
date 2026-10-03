@@ -304,14 +304,19 @@ def handle_connection(conn, address, conn_id, root, timeout):
                 raise BadRequest("cabeçalho maior que o limite")
             request = parse_request(head)
 
-            # descarta um eventual corpo para não confundi-lo com a próxima requisição
+            # descarta um eventual corpo para não confundi-lo com a próxima requisição.
+            # O que falta é lido em blocos e jogado fora, sem acumular: um Content-Length
+            # gigante não consome memória. recv() nunca pede mais do que o restante do
+            # corpo, para não engolir o começo da requisição seguinte.
             remaining = body_length(request)
-            while len(buffer) < remaining:
-                data = conn.recv(RECV_SIZE)
+            discarded = min(remaining, len(buffer))
+            buffer = buffer[discarded:]
+            remaining -= discarded
+            while remaining > 0:
+                data = conn.recv(min(RECV_SIZE, remaining))
                 if not data:
                     return
-                buffer += data
-            buffer = buffer[remaining:]
+                remaining -= len(data)
 
             keep_alive = wants_keep_alive(request)
             status, sent = handle_request(conn, request, root, keep_alive)
