@@ -1,7 +1,7 @@
 # T1 – Servidor HTTP/1.1 sobre sockets TCP (Grupo 5)
 
 Laboratório de Redes de Computadores – PUCRS.
-Integrantes: `<Integrante 1>`, `<Integrante 2>`, `<Integrante 3>`.
+Integrantes: Enzo Augusto Tonatto, Matheus Seibt, Rafael Melo Rothmann.
 
 Servidor HTTP/1.1 escrito em Python usando diretamente a API de sockets TCP
 (`socket`, `bind`, `listen`, `accept`, `recv`, `sendall`). Nenhuma biblioteca de
