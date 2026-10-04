@@ -1,25 +1,16 @@
 ---
-title: "T1 – Servidor HTTP/1.1 sobre sockets TCP"
-subtitle: "Laboratório de Redes de Computadores – Grupo 5"
-author: "<Integrante 1>, <Integrante 2>, <Integrante 3>"
-date: "<data>"
+title: T1 – Servidor HTTP/1.1 sobre sockets TCP
+subtitle: Laboratório de Redes de Computadores – Grupo 5
+author: Enzo Augusto Tonatto, Matheus Seibt, Rafael Melo Rothmann
+date: 05/10/2026
 ---
-
-<!--
-RASCUNHO. Tudo entre <...> ou marcado com TODO precisa ser preenchido com os
-dados reais das medições ENTRE MÁQUINAS DISTINTAS. As análises dos itens 8–10
-devem ser escritas pelo grupo: os roteiros abaixo são só guias.
-Exportar para PDF: abrir no VS Code/Typora e exportar, ou
-  pandoc relatorio.md -o relatorio.pdf
--->
 
 # 1. Arquitetura
 
-**Ambiente.** Servidor no notebook `<macOS: modelo, versão, IP 192.168.15.9>`; cliente no
-notebook `<Ubuntu: modelo, versão, IP 192.168.15.x>`; os dois na Wi-Fi doméstica
-(`<roteador/banda: 2,4 ou 5 GHz>`), em IPv4. Segundo cliente para o teste de
-simultaneidade: `<celular na mesma Wi-Fi, IP …>`. Servidor escutando em `0.0.0.0:8080`,
-raiz `./www`.
+**Ambiente.** Servidor num notebook com macOS, IP `192.168.15.9`; cliente
+num notebook com Ubuntu, IP `192.168.15.15`; os dois na mesma Wi-Fi doméstica, em IPv4. Segundo cliente para o teste de
+simultaneidade: um iPhone na mesma Wi-Fi, IP `192.168.15.8`. Servidor escutando em
+`0.0.0.0:8080`, raiz `./www`.
 
 O servidor também aceita `--host ::` (socket `AF_INET6` com `IPV6_V6ONLY` desligado, que
 atende IPv6 e IPv4), usado nos testes preliminares num hotspot de celular só IPv6.
@@ -104,7 +95,7 @@ com `commonpath` (`/www2` não passa como se estivesse dentro de `/www`). Os
 testes automatizados também cobrem um link simbólico dentro de `www/` apontando
 para fora (403).
 
-TODO (opcional): print do terminal com as respostas.
+![As três primeiras tentativas de travessia e as respostas do servidor](img/travessia.png)
 
 # 4. Captura de uma transação completa
 
@@ -112,13 +103,13 @@ Captura `capturas/transacao.pcapng`: `curl http://192.168.15.9:8080/index.html`
 feito do Ubuntu (192.168.15.15) e capturado no Mac (192.168.15.9), filtro
 `tcp.port == 8080`. Uma única conexão, 12 pacotes, 19 ms do SYN ao último ACK.
 
-TODO: print do Wireshark (`relatorio/img/transacao.png`).
+![Transação completa no Wireshark (filtro `tcp.port == 8080`)](img/transacao.png)
 
 | Pacote | Origem → destino | Flags | Dados | Papel |
 |---|---|---|---|---|
 | 1 | Ubuntu → Mac | SYN | 0 | **Handshake** (1/3), MSS 1460 |
 | 2 | Mac → Ubuntu | SYN, ACK | 0 | **Handshake** (2/3) |
-| 3 | Ubuntu → Mac | ACK | 0 | **Handshake** (3/3), 6,1 ms após o SYN ≈ 1 RTT |
+| 3 | Ubuntu → Mac | ACK | 0 | **Handshake** (3/3), 5,5 ms após o SYN-ACK = 1 RTT |
 | 4 | Ubuntu → Mac | PSH, ACK | 91 B | **Requisição**: `GET /index.html HTTP/1.1` |
 | 5 | Mac → Ubuntu | ACK | 0 | ACK da requisição |
 | 6 | Mac → Ubuntu | ACK | 1448 B | **Resposta**: `HTTP/1.1 200 OK` + cabeçalhos + início do corpo (1 MSS) |
@@ -131,6 +122,12 @@ TODO: print do Wireshark (`relatorio/img/transacao.png`).
 
 O cabeçalho e o primeiro bloco do corpo saem no mesmo segmento (pacote 6),
 efeito do `sendall` único descrito na seção 1.
+
+O Mac respondeu ao SYN em 0,5 ms (pacote 2); do SYN-ACK ao ACK do cliente (pacote 3)
+passaram 5,5 ms, que é 1 RTT medido no lado do servidor. Como o `curl` não pediu
+`Connection: close`, quem encerra é o cliente (pacote 9): o `recv()` do servidor
+devolve vazio, `handle_connection` sai do laço e o `finally` fecha o socket, o que
+gera o FIN do servidor (pacote 11).
 
 # 5. Evidência de atendimento simultâneo
 
@@ -161,7 +158,12 @@ requisições rápidas do Ubuntu e as conexões do celular. Na captura
 `capturas/simultaneo.pcapng`, as 3 conexões do celular começam e terminam dentro
 da conexão lenta do Ubuntu (Wireshark: Statistics → Conversations → TCP).
 
-TODO (opcional): print da janela Conversations.
+A captura começou cerca de 2 s depois de a conexão lenta abrir (o SYN dela não foi
+capturado); por isso o Wireshark mostra 13,2 s de duração, e não os 15,2 s do log.
+Na captura, as conexões do celular começam 2,3 s depois e terminam 9,4 s depois disso
+(aos 11,8 s), ainda dentro dos 13,2 s da conexão lenta.
+
+![Conversas TCP em simultaneo.pcapng: as conexões do celular dentro da conexão lenta](img/conversations.png)
 
 # 6. RTT medido
 
@@ -180,7 +182,15 @@ poucos pings muito lentos (até 203 ms), típicos de Wi-Fi, puxam a média para 
 RTT medido nas próprias capturas (do SYN-ACK enviado pelo servidor até o ACK
 do cliente): mediana de **5,2 ms** em `c1.pcapng` (10 handshakes).
 
-TODO: comentar a diferença entre o RTT do ping e o dos handshakes.
+**Por que o ping dá mais que os handshakes.** As duas medidas não observam a mesma
+coisa. O RTT dos handshakes é medido pela captura no próprio servidor, do SYN-ACK
+saindo até o ACK chegando: só entram a rede e a resposta do kernel do cliente. O ping
+é medido pelo programa `ping`, no cliente. A causa mais provável da diferença é o
+Wi-Fi: o ping envia um pacote a cada 0,2 s, e nesse intervalo a placa de rede (do
+notebook ou do roteador) pode entrar em modo de economia de energia e atrasar o pacote
+seguinte. Em C1 e C2 o tráfego é contínuo por 65 a 136 ms, e o rádio fica ativo. Os
+picos de até 203 ms e a média 2 a 2,5 vezes maior que a mediana mostram essa
+variação. Por isso o item 9 usa como referência o RTT medido nas próprias capturas.
 
 # 7. Comparação C1 × C2
 
@@ -211,64 +221,114 @@ Todas as rodadas:
 
 # 8. Overhead de conexão (C1)
 
-Dados de `c1.pcapng`:
+Dados de `c1.pcapng` e `c2.pcapng`:
 
 - Um handshake = 3 pacotes: SYN (74 B) + SYN-ACK (78 B) + ACK (66 B) = **218 B**.
-- Um encerramento = 4 pacotes: FIN, ACK, FIN, ACK (66 B cada) = **264 B**.
-- Abrir e fechar uma conexão: **7 pacotes, 482 B**. Em C2 (1 conexão), exatamente isso.
-- `metricas.py` em C1: abertura 30 pacotes / 2 180 B; encerramento 62 pacotes / 4 092 B
-  (inclui ACKs puros de dados que chegam depois do primeiro FIN).
-- Diferença de payload C1 − C2 = 380 B = 10 × (`Connection: close\r\n` na
-  requisição + na resposta) = 10 × 2 × 19 B.
+- Um encerramento iniciado pelo cliente = 4 pacotes: FIN, ACK, FIN, ACK (66 B cada)
+  = **264 B**.
+- Abrir e fechar uma conexão: **7 pacotes, 482 B**. É exatamente o que aparece em C2,
+  que usa uma conexão só.
 
-TODO: escrever a análise.
+Em C1, abrir e fechar as 10 conexões custa pelo menos 10 × 7 = **70 pacotes (46 % dos
+152)**, mas só 10 × 482 = **4 820 B (8 % dos 59 402 B)**. A diferença entre C1 e C2 se
+decompõe exatamente em três parcelas:
 
-Roteiro:
+| Origem | Pacotes | Bytes |
+|---|---|---|
+| 9 conexões a mais × (3 de abertura + 4 de encerramento) | 63 | 4 338 |
+| `Connection: close\r\n` (19 B) na requisição e na resposta, 10 vezes | 0 | 380 |
+| ACKs a mais do cliente (66 B cada) | 11 | 726 |
+| **Total (C1 − C2)** | **74** | **5 444** |
 
-- Quantos pacotes e bytes há em **um** handshake (SYN, SYN-ACK, ACK)? E em um
-  encerramento (FIN, ACK, FIN, ACK)? Conferir num stream do Wireshark.
-- Multiplicar por 10 conexões e comparar com o total de C1 (em %).
-- Comparar com a diferença de pacotes e de bytes entre C1 e C2: quanto dela é
-  explicado só pela abertura e pelo fechamento de conexões?
-- Detalhe: o script conta como encerramento todo FIN/RST e todo ACK puro depois
-  do primeiro FIN da conexão.
+Abrir e fechar conexões responde por 85 % dos pacotes extras e 80 % dos bytes extras.
+Por isso a economia de C2 é grande em pacotes (48,7 %) e pequena em bytes (9,2 %): os
+pacotes de controle são pequenos (66 a 78 B), enquanto o conteúdo das 10 respostas
+(cerca de 49 KB) é o mesmo nos dois cenários.
+
+Os 11 ACKs a mais vêm do cliente: em C1 ele enviou em média 2,2 ACKs por resposta,
+contra 1,1 em C2. Numa conexão nova, o TCP do Linux confirma os primeiros segmentos
+com mais frequência (modo *quick ACK*); numa conexão longa, passa a agrupar as
+confirmações (ACK atrasado).
+
+O encerramento também muda de forma. Como o cliente envia `Connection: close`, em C1
+quem fecha primeiro é o **servidor**: logo depois da resposta, `handle_connection` sai
+do laço e o `finally` chama `conn.close()`. O FIN do servidor sai antes de o cliente
+confirmar os dados, e os ACKs desses dados chegam depois dele; em 5 ocasiões os FINs
+dos dois lados se cruzam e o servidor repete o FIN na última confirmação. Por isso
+`metricas.py` conta 62 pacotes de encerramento em C1 (6,2 por conexão, incluindo os
+ACKs dos dados que chegam depois do primeiro FIN), contra 4 em C2, onde quem fecha é o
+cliente.
 
 # 9. Análise em função do RTT
 
-Dados (rodada 1):
+Rodada 1, tempos medidos na captura do servidor (soma de cada trecho):
 
-- T_C1 − T_C2 = 136,1 − 65,3 = **70,8 ms**.
-- Em RTTs: 70,8 / 7,09 (mediana do ping) ≈ **10 RTT**; 70,8 / 5,2 (RTT dos
-  handshakes na captura) ≈ 13,6 RTT. Esperado: 9 RTT (9 handshakes a mais).
-- Em C1, visto do servidor, cada requisição gasta: SYN → GET ≈ **5,4 ms** (1 RTT
-  de handshake) + GET → fim da resposta ≈ 0,8 ms + fim da resposta → próximo SYN
-  ≈ **6,4 ms** (1 RTT: a resposta chega ao cliente e o SYN seguinte volta).
-- Em C2, o intervalo entre GETs consecutivos é ≈ **4,8 ms** (1 RTT por requisição).
-- Conta: C1 ≈ 10 × (5,4 + 0,8 + 6,4) ≈ 126 ms (medido: 136 ms);
-  C2 ≈ 6,4 (handshake) + 9 × 4,8 ≈ 50 ms + encerramento (medido: 65 ms).
+| Trecho | C1 | C2 | C1 − C2 |
+|---|---|---|---|
+| Handshakes (SYN → GET) | 63,5 ms (10 ×) | 6,4 ms (1 ×) | **+57,1 ms** |
+| Servidor (GET → fim da resposta) | 8,8 ms | 6,8 ms | +2,0 ms |
+| Cliente entre requisições (fim da resposta → próximo SYN ou GET) | 59,3 ms | 41,4 ms | +17,9 ms |
+| Encerramento final (fim da última resposta → último pacote) | 4,5 ms | 10,7 ms | −6,2 ms |
+| **Tempo total** | **136,1 ms** | **65,3 ms** | **+70,8 ms** |
 
-TODO: escrever a análise.
+Em C2, cada requisição custa cerca de 1 RTT: a resposta vai até o cliente e o GET
+seguinte volta ao servidor (mediana de 4,8 ms entre GETs). Em C1, cada requisição
+custa cerca de 2 RTT, porque antes do GET o cliente precisa abrir uma conexão nova, e
+nenhum byte da requisição pode sair antes do handshake (SYN → SYN-ACK → ACK). Na
+captura, o intervalo entre o SYN e o GET de cada conexão tem mediana de 5,4 ms, em
+linha com o RTT de 5,2 ms medido nos handshakes (item 6). Como C2 também faz um
+handshake, o esperado é que C1 gaste **9 RTT a mais**.
 
-Roteiro:
+A tabela mostra de onde vêm os 70,8 ms:
 
-- Em C1, cada requisição precisa de 1 RTT de handshake antes de poder enviar o
-  GET, mais 1 RTT de requisição/resposta. Em C2 o handshake acontece uma vez só.
-- Diferença esperada ≈ 9 × RTT (9 handshakes a mais). Calcular
-  (T_C1 − T_C2) / RTT_médio e comparar com 9.
-- C1 e C2 usam um único processo `curl`, então a diferença de tempo vem só da
-  rede e das conexões. Numa medição anterior, com um `curl` por requisição, cada
-  processo novo somava ~150 ms entre uma conexão e a seguinte no Windows, muito
-  mais que o RTT. Vale citar como armadilha de medição. Olhar no Wireshark o intervalo entre o SYN
-  e o GET de cada conexão, que deve ser ≈ 1 RTT.
-- O encerramento (FIN) em geral não soma RTT ao tempo percebido: o cliente
-  já recebeu a resposta completa quando a troca de FINs termina.
+- **9 handshakes a mais: 57,1 ms (81 % da diferença)**, média de 6,3 ms cada, ou seja,
+  1 RTT por conexão nova. É o custo previsto.
+- **Cliente trocando de conexão: 17,9 ms**, cerca de 2 ms por conexão. Antes de cada
+  requisição de C1, o cliente fecha a conexão antiga e abre uma nova (o FIN do cliente
+  e o SYN seguinte chegam juntos ao servidor). Esse custo não depende da rede.
+- **Servidor: 2,0 ms**, cerca de 0,2 ms por requisição, provavelmente para aceitar a
+  conexão e criar a thread de cada conexão nova.
+- **Encerramento final: −6,2 ms.** Em C2 o cliente só fecha a conexão depois de
+  receber a última resposta e ainda espera o FIN do servidor (cerca de 2 RTT no fim da
+  captura); em C1 o servidor envia o FIN logo depois da resposta (cerca de 1 RTT).
+
+Em RTTs: 70,8 / 5,2 ≈ 13,6 RTT, que são os 9 RTT dos handshakes mais custos que não
+dependem da rede (≈ 13,7 ms no total). Dividindo pela mediana do ping (7,09 ms), o
+resultado dá ≈ 10 RTT, mas só porque o ping superestima o RTT (item 6).
+
+Dois cuidados de medição. Primeiro, C1 e C2 usam um único processo `curl` com 10 URLs:
+numa medição anterior, com um `curl` por requisição, cada processo novo somava ~150 ms
+entre uma conexão e a seguinte no Windows, muito mais que o RTT, e escondia o efeito
+do handshake. Segundo, a rodada 2 de C1 (223,2 ms) teve um único intervalo de 92 ms
+sem pacotes, um pico de latência do Wi-Fi; por isso a análise usa a rodada mediana.
 
 # 10. Conclusão
 
-TODO: escrever.
+O servidor atende os requisitos das duas partes: parsing sobre o fluxo de bytes do TCP,
+os códigos de status obrigatórios, proteção contra travessia de diretório, uma thread
+por conexão e conexões persistentes com timeout ocioso.
 
-Roteiro: o custo extra de C1 é ≈ (número de conexões novas) × RTT. A persistência
-ganha mais quanto **maior o RTT** (ex.: servidor em outro continente, rede
-móvel/satélite) e quanto **mais requisições** a página faz (muitos recursos
-pequenos, onde o tempo de transmissão é pequeno perto do RTT). Em localhost
-(RTT ≈ 0) a diferença quase some, por isso o trabalho exige máquinas distintas.
+Com 10 requisições, a conexão persistente economizou 70,8 ms (52 % do tempo de C1),
+74 pacotes (48,7 %) e 5 444 B (9,2 %). O custo extra de abrir uma conexão por
+requisição é aproximadamente
+
+> (número de conexões novas) × (1 RTT de handshake + custo fixo por conexão)
+
+Nesta rede, com RTT ≈ 5 ms, o termo do RTT já respondeu por 81 % da diferença. A
+conexão persistente traria um ganho ainda maior:
+
+- **Com RTT maior.** O custo do handshake cresce linearmente com o RTT. Com 100 ms
+  (servidor em outro continente, rede móvel ou satélite), os mesmos 9 handshakes
+  custariam cerca de 900 ms em vez de 57 ms, e o custo fixo por conexão ficaria
+  desprezível.
+- **Com mais requisições por página.** Uma página com dezenas de recursos pequenos paga
+  um handshake por recurso; quanto menor o recurso, maior a parte do tempo gasta
+  esperando RTTs, e não transmitindo dados.
+- **Com HTTPS.** Cada conexão nova também paga o handshake TLS: mais 1 RTT no TLS 1.3,
+  ou 2 no TLS 1.2.
+- **Com respostas maiores.** Toda conexão nova começa no *slow start*, com janela de
+  congestionamento pequena; uma conexão persistente reaproveita a janela já aberta.
+
+No extremo oposto, em localhost (RTT ≈ 0) a diferença quase desaparece. Por isso o
+trabalho exige máquinas distintas: o ganho da conexão persistente é, antes de tudo, um
+ganho de RTTs.
